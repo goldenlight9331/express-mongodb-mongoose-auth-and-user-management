@@ -1,6 +1,6 @@
 import { createServer } from '#packages/index.js';
 import { logger } from '#utils/index.js';
-import { dotEnv } from '#dotEnv/index.js';
+import { dotEnv } from '#dotenv/index.js';
 
 const { PORT } = dotEnv;
 
