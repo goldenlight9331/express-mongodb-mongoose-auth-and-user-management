@@ -1,12 +1,13 @@
 {
   "name": "the-smart-towers-backend",
+  "author": "Sharjeel Faiq",
   "version": "1.0.0",
   "type": "module",
   "license": "ISC",
   "main": "./src/index.js",
   "scripts": {
-    "dev": "nodemon ./src/index.js",
-    "start": "node ./src/index.js",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
     "generatePayload": "node ./src/scripts/index.js > samplePayload.json",
     "format": "prettier --write \"src/**/*.{js,jsx}\""
   },
