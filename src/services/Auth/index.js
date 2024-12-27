@@ -1,5 +1,5 @@
 import { bcryptjs, createError } from '#packages/index.js';
-import { tokenUtils, logger } from '#utils/index.js';
+import { tokenUtils, logger, handleError } from '#utils/index.js';
 import { dotEnv } from '#dotenv/index.js';
 import { User } from '#models/index.js';
 

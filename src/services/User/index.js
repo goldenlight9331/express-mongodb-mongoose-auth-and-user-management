@@ -1,5 +1,5 @@
 import { bcryptjs, createError } from '#packages/index.js';
-import { tokenUtils, logger } from '#utils/index.js';
+import { tokenUtils, logger, handleError } from '#utils/index.js';
 import { dotEnv } from '#dotenv/index.js';
 import { User } from '#models/index.js';
 
@@ -12,9 +12,7 @@ export const UsersService = {
 
       return users;
     } catch (error) {
-      logger.error(error);
-
-      throw createError(500, 'Internal Server Error');
+      return handleError(error, 'Failed to fetch users');
     }
   },
   getById: async userId => {
@@ -27,9 +25,7 @@ export const UsersService = {
 
       return user;
     } catch (error) {
-      logger.error(error);
-
-      throw createError(500, 'Internal Server Error');
+      return handleError(error, `Failed to fetch user by id: ${userId}`);
     }
   },
   updateById: async (userId, userData) => {
@@ -46,9 +42,7 @@ export const UsersService = {
 
       return user;
     } catch (error) {
-      logger.error(error);
-
-      throw createError(500, 'Internal Server Error');
+      return handleError(error, `Failed to update user by id: ${userId}`);
     }
   },
   deleteById: async userId => {
@@ -63,9 +57,7 @@ export const UsersService = {
 
       return user;
     } catch (error) {
-      logger.error(error);
-
-      throw createError(500, 'Internal Server Error');
+      return handleError(error, `Failed to delete user by id: ${userId}`);
     }
   },
 };
