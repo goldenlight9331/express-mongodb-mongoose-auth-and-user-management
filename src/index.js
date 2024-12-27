@@ -1,5 +1,5 @@
 import { express, colors } from '#utils/index.js';
-import { serverListener } from '#server/index.js';
+import { listenServer } from '#server/index.js';
 import {
   configureMiddlewares,
   connectDatabase,
@@ -7,7 +7,7 @@ import {
 } from '#config/index.js';
 
 const app = express();
-export const io = serverListener(app);
+export const io = listenServer(app);
 
 connectDatabase();
 configureMiddlewares(app);

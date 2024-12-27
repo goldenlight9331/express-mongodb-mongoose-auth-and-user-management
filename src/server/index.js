@@ -4,7 +4,7 @@ import { dotEnv } from '#dotenv/index.js';
 
 const { PORT } = dotEnv;
 
-export const serverListener = app => {
+export const listenServer = app => {
   const server = createServer(app);
 
   server.listen(PORT || 5000, () => {
