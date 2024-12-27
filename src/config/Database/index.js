@@ -6,7 +6,7 @@ let isConnected = false;
 export const connectDatabase = async () => {
   const { MONGO_URI } = dotEnv;
   if (isConnected) {
-    console.info('Using existing MongoDB connection'.magenta.bold);
+    logger.info('Using existing MongoDB connection'.magenta.bold);
     return;
   }
 
