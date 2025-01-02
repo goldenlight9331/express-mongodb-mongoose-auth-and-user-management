@@ -9,7 +9,7 @@ export const handleError = (error, message) => {
   }
 
   return {
-    status: error.status,
-    message: error.message,
+    status: error.status || 500,
+    message: error.message || 'Internal Server Error',
   };
 };

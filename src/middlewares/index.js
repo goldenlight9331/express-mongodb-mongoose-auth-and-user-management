@@ -1,1 +1,2 @@
-export * from './Validation/index.js';
+export * from './Validate/index.js';
+export * from './Global/index.js';

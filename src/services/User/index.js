@@ -7,6 +7,10 @@ export const UsersService = {
     try {
       const users = await User.find();
 
+      if (!users.length) {
+        throw createError(404, 'Users not found');
+      }
+
       return users;
     } catch (error) {
       return handleError(error, 'Failed to fetch users');
@@ -27,15 +31,14 @@ export const UsersService = {
   },
   updateById: async (userId, userData) => {
     try {
-      const user = await User.findById(userId);
+      const user = await User.findByIdAndUpdate(userId, userData, {
+        new: true,
+        upsert: true,
+      });
 
       if (!user) {
         throw createError(404, 'User not found');
       }
-
-      Object.assign(user, userData);
-
-      await user.save();
 
       return user;
     } catch (error) {

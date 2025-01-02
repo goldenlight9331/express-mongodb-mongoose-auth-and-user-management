@@ -1,5 +1,5 @@
 import { createError } from '#packages/index.js';
-import { tokenUtils, handleError } from '#utils/index.js';
+import { generateAuthToken, handleError } from '#utils/index.js';
 import { User } from '#models/index.js';
 
 export const AuthService = {
@@ -8,42 +8,44 @@ export const AuthService = {
       const { email } = userData;
 
       const existingUser = await User.findOne({ email });
-
       if (existingUser) {
         throw createError(400, 'User with the provided email already exists');
       }
 
-      const user = new User(userData);
-      user.save();
+      const user = await User.create(userData);
+      const token = generateAuthToken(user);
 
-      const token = tokenUtils.generateAuthToken(user);
-
-      return {
+      const result = {
         name: user.name,
         email: user.email,
-        token,
+        role: user.role,
+        token: `Bearer ${token}`,
       };
+
+      return result;
     } catch (error) {
       return handleError(error, 'Failed to sign up user');
     }
   },
-  signIn: async (email, password) => {
+  signIn: async ({ email, password }) => {
     try {
       const user = await User.findOne({ email });
       if (!user) throw createError(401, 'Invalid credentials');
 
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) throw createError(401, 'Invalid credentials');
+      await user.comparePassword(password);
 
-      const token = tokenUtils.generateAuthToken(user);
+      const token = generateAuthToken(user);
 
-      return {
+      const result = {
         name: user.name,
         email: user.email,
-        token,
+        role: user.role,
+        token: `Bearer ${token}`,
       };
+
+      return result;
     } catch (error) {
       return handleError(error, 'Failed to sign in user');
     }
-  }
+  },
 };

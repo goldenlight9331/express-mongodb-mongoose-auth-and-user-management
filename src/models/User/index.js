@@ -1,6 +1,7 @@
-import { mongoose } from '#packages/index.js';
+import { mongoose, bcrypt, createError } from '#packages/index.js';
+import { handleError } from '#utils/index.js';
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Full name is required'],
@@ -22,16 +23,16 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+    required: [true, 'Role is required'],
     enum: {
-      values: ['admin', 'operator'],
-      message: 'Role must be either admin or operator',
+      values: ['admin', 'user'],
+      message: 'Role must be either admin, or user',
     },
-    required: true,
-    default: 'operator',
+    default: 'user',
   },
 });
 
-userSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -39,4 +40,18 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-export const User = mongoose.model('users', userSchema);
+UserSchema.methods.comparePassword = async function (password) {
+  try {
+    const isMatch = await bcrypt.compare(password, this.password);
+
+    if (!isMatch) {
+      throw createError(401, 'Invalid credentials');
+    }
+
+    return isMatch;
+  } catch (error) {
+    throw handleError(error, 'Failed to compare passwords');
+  }
+};
+
+export const User = mongoose.model('users', UserSchema);

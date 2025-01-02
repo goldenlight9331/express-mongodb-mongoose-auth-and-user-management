@@ -30,18 +30,15 @@
     "winston": "^3.17.0"
   },
   "imports": {
-    "#root/*": "./src/*",
     "#config/*": "./src/config/*",
     "#controllers/*": "./src/controllers/*",
-    "#helpers/*": "./src/helpers/*",
     "#middlewares/*": "./src/middlewares/*",
     "#models/*": "./src/models/*",
+    "#packages/*": "./src/packages/*",
     "#routes/*": "./src/routes/*",
     "#server/*": "./src/server/*",
     "#services/*": "./src/services/*",
     "#utils/*": "./src/utils/*",
-    "#dotenv/*": "./src/utils/Dotenv/*",
-    "#packages/*": "./src/utils/Packages/*",
     "#validations/*": "./src/validations/*"
   }
 }

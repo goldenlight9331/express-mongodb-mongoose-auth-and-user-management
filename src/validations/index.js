@@ -1,4 +1,4 @@
-import { Joi } from '../utils/index.js';
+import { Joi } from '#packages/index.js';
 
 export const signUpSchema = Joi.object({
   name: Joi.string().min(2).required().messages({
@@ -19,10 +19,9 @@ export const signUpSchema = Joi.object({
     'string.min': 'Password must be at least 6 characters long',
     'any.required': 'Password is required',
   }),
-  role: Joi.string().valid('admin', 'operator').required().messages({
+  role: Joi.string().valid('admin', 'teacher', 'viewer').messages({
     'string.base': 'Role should be a type of text',
-    'any.only': 'Role must be either admin or operator',
-    'any.required': 'Role is required',
+    'any.only': 'Role must be either admin, teacher or viewer',
   }),
 });
 
