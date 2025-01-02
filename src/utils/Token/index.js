@@ -1,6 +1,6 @@
 import { jwt, createError } from '#packages/index.js';
 import { handleError, dotEnv } from '#utils/index.js';
-const { NODE_ENV, JWT_SECRET } = dotEnv;
+const { JWT_SECRET } = dotEnv;
 
 export const tokenUtils = {
   verifyToken: async token => {

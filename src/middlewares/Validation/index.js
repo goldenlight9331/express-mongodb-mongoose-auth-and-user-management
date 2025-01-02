@@ -20,17 +20,7 @@ export const validateMiddleware = schema => async (req, res, next) => {
     req.body = value;
 
     next();
-  } catch (err) {
-    logger.error({
-      message: 'Unexpected error in validation middleware',
-      error: err.message,
-      stack: err.stack,
-    });
-
-    return {
-      message: 'Unexpected error in validation middleware',
-      error: err.message,
-      stack: err.stack,
-    };
+  } catch (error) {
+    return handleError(error, 'Failed to validate request');
   }
 };

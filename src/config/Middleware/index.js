@@ -3,7 +3,7 @@ import { morgan, cors, express } from '#packages/index.js';
 const corsOptions = {
   origin: true,
   credentials: true,
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 };
 
 export const configureMiddlewares = app => {

@@ -8,4 +8,3 @@ export const authRoutes = express.Router();
 authRoutes
   .post('/signup', validateMiddleware(signUpSchema), AuthController.signUp)
   .post('/signin', validateMiddleware(signInSchema), AuthController.signIn)
-  .post('/signout', AuthController.signOut);

@@ -1,4 +1,4 @@
-import { mongoose, bcryptjs } from '#packages/index.js';
+import { mongoose } from '#packages/index.js';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -28,10 +28,6 @@ const userSchema = new mongoose.Schema({
     },
     required: true,
     default: 'operator',
-  },
-  isApproved: {
-    type: Boolean,
-    default: false,
   },
 });
 

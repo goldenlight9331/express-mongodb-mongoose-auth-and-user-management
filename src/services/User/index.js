@@ -1,9 +1,6 @@
-import { bcryptjs, createError } from '#packages/index.js';
-import { tokenUtils, logger, handleError } from '#utils/index.js';
-import { dotEnv } from '#dotenv/index.js';
+import { createError } from '#packages/index.js';
+import { handleError } from '#utils/index.js';
 import { User } from '#models/index.js';
-
-const { JWT_EXPIRATION } = dotEnv;
 
 export const UsersService = {
   getAll: async () => {

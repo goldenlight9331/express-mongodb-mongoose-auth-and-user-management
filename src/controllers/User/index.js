@@ -1,11 +1,8 @@
 import { UsersService } from '#services/index.js';
-import { tokenUtils } from '#utils/index.js';
 
 export const UsersController = {
-  getAll: async (req, res, next) => {
+  getAll: async (_, res) => {
     try {
-      const userData = req.body;
-
       const result = await UsersService.getAll();
 
       res.status(201).json(result);
@@ -13,7 +10,7 @@ export const UsersController = {
       res.status(error?.status).json({ message: error?.message });
     }
   },
-  getById: async (req, res, next) => {
+  getById: async (req, res) => {
     try {
       const { userId } = req.params;
 
@@ -24,7 +21,7 @@ export const UsersController = {
       res.status(error?.status).json({ message: error?.message });
     }
   },
-  updateById: async (req, res, next) => {
+  updateById: async (req, res) => {
     try {
       const { userId } = req.params;
       const userData = req.body;
@@ -36,7 +33,7 @@ export const UsersController = {
       res.status(error?.status).json({ message: error?.message });
     }
   },
-  deleteById: async (req, res, next) => {
+  deleteById: async (req, res) => {
     try {
       const { userId } = req.params;
 
