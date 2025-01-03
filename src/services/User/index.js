@@ -53,7 +53,7 @@ export const UsersService = {
         throw createError(404, 'User not found');
       }
 
-      return "User deleted successfully";
+      return 'User deleted successfully';
     } catch (error) {
       return handleError(error, `Failed to delete user by id: ${userId}`);
     }

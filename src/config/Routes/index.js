@@ -1,4 +1,5 @@
 import { express } from '#packages/index.js';
+import { validate } from '#middlewares/index.js';
 import { authRoutes, usersRoutes } from '#routes/index.js';
 
 const rootRouter = express.Router();
@@ -11,7 +12,12 @@ rootRouter.get('/', (_, res) => {
 rootRouter.use('/api/v1', v1Router);
 
 v1Router.use('/auth', authRoutes);
-v1Router.use('/users', usersRoutes);
+v1Router.use(
+  '/users',
+  validate.authToken,
+  validate.authRole('admin'),
+  usersRoutes,
+);
 
 v1Router.use('*', (_, res) => {
   res.status(404).json({ message: 'Endpoint not found' });
