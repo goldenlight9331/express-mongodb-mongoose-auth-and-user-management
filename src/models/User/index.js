@@ -1,5 +1,7 @@
-import { mongoose, bcrypt, createError } from '#packages/index.js';
-import { handleError } from '#utils/index.js';
+import { mongoose, bcrypt, jwt, createError } from '#packages/index.js';
+import { handleError, dotEnv } from '#utils/index.js';
+
+const { JWT_SECRET } = dotEnv;
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -39,6 +41,20 @@ UserSchema.pre('save', async function (next) {
   }
   next();
 });
+
+UserSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign(
+    {
+      role: this.role,
+    },
+    JWT_SECRET,
+    {
+      expiresIn: '1h',
+      algorithm: 'HS256',
+    },
+  );
+  return token;
+};
 
 UserSchema.methods.comparePassword = async function (password) {
   try {

@@ -28,29 +28,44 @@ export const validate = {
       return handleError(error, 'Failed to validate request');
     }
   },
+
   authToken: async (req, res, next) => {
     try {
-      const token = req.header('Authorization')?.split(' ')[1];
+      const token = req.cookies.token;
 
       if (!token) {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res
+          .status(401)
+          .json({ error: 'Unauthorized: No token provided' });
       }
 
-      jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ message: 'Invalid Token' });
-        req.user = user;
+      try {
+        const decoded = await jwt.verify(token, JWT_SECRET);
+
+        req.decoded = decoded;
         next();
-      });
+      } catch (err) {
+        if (err.name === 'TokenExpiredError') {
+          res.clearCookie('token');
+          return res
+            .status(401)
+            .json({ message: 'Session expired. Please log in again.' });
+        }
+
+        return res.status(403).json({ message: 'Invalid token' });
+      }
     } catch (error) {
       return handleError(error, 'Failed to validate token');
     }
   },
-  authRoles: admin => {
-    return (req, res, next) => {
-      if (req.user.role !== admin) {
-        return res.status(403).json({ message: 'Forbidden: Access Denied' });
-      }
-      next();
-    };
+
+  authRole: admin => (req, res, next) => {
+    if (req.decoded.role !== admin) {
+      return res
+        .status(403)
+        .json({ message: 'Forbidden: Admin access required' });
+    }
+
+    next();
   },
 };

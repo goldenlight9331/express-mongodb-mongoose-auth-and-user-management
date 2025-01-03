@@ -1,11 +1,12 @@
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
+import cookieParser from 'cookie-parser';
 import colors from 'colors';
 import cors from 'cors';
+import createError from 'http-errors';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import express from 'express';
-import createError from 'http-errors';
 import Joi from 'joi';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
@@ -16,6 +17,7 @@ import winston from 'winston';
 export {
   axios,
   bcrypt,
+  cookieParser,
   colors,
   cors,
   createError,

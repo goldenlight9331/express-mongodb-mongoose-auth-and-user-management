@@ -1,5 +1,5 @@
 import { createError } from '#packages/index.js';
-import { generateAuthToken, handleError } from '#utils/index.js';
+import { handleError } from '#utils/index.js';
 import { User } from '#models/index.js';
 
 export const AuthService = {
@@ -13,13 +13,13 @@ export const AuthService = {
       }
 
       const user = await User.create(userData);
-      const token = generateAuthToken(user);
+      const token = user.generateAuthToken();
 
       const result = {
         name: user.name,
         email: user.email,
         role: user.role,
-        token: `Bearer ${token}`,
+        token,
       };
 
       return result;
@@ -33,14 +33,13 @@ export const AuthService = {
       if (!user) throw createError(401, 'Invalid credentials');
 
       await user.comparePassword(password);
-
-      const token = generateAuthToken(user);
+      const token = user.generateAuthToken();
 
       const result = {
         name: user.name,
         email: user.email,
         role: user.role,
-        token: `Bearer ${token}`,
+        token,
       };
 
       return result;
