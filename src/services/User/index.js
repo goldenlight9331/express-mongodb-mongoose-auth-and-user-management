@@ -47,15 +47,13 @@ export const UsersService = {
   },
   deleteById: async userId => {
     try {
-      const user = await User.findById(userId);
+      const user = await User.findByIdAndDelete(userId);
 
       if (!user) {
         throw createError(404, 'User not found');
       }
 
-      await user.remove();
-
-      return user;
+      return "User deleted successfully";
     } catch (error) {
       return handleError(error, `Failed to delete user by id: ${userId}`);
     }
