@@ -34,6 +34,7 @@ export const validate = {
       const token = req.cookies.token;
 
       if (!token) {
+        logger.error('Unauthorized: No token provided');
         return res
           .status(401)
           .json({ error: 'Unauthorized: No token provided' });
@@ -47,11 +48,13 @@ export const validate = {
       } catch (err) {
         if (err.name === 'TokenExpiredError') {
           res.clearCookie('token');
+          logger.error('Session expired. Please log in again.');
           return res
             .status(401)
             .json({ message: 'Session expired. Please log in again.' });
         }
 
+        logger.error('Invalid token');
         return res.status(403).json({ message: 'Invalid token' });
       }
     } catch (error) {
