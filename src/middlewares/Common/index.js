@@ -6,7 +6,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
 };
 
-export const implementMiddlewares = app => {
+export const setupMiddlewares = app => {
   app.use(express.json());
   app.use(cors(corsOptions));
   app.use(cookieParser());

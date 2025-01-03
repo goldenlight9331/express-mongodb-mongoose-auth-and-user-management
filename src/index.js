@@ -1,13 +1,13 @@
 import { express } from '#packages/index.js';
 import { listenServer } from '#server/index.js';
 import { connectDatabase, configureRoutes } from '#config/index.js';
-import { implementMiddlewares } from '#middlewares/index.js';
+import { setupMiddlewares } from '#middlewares/index.js';
 
 const app = express();
-export const io = listenServer(app);
 
 connectDatabase();
-implementMiddlewares(app);
+setupMiddlewares(app);
 configureRoutes(app);
+listenServer(app);
 
 export default app;
