@@ -30,15 +30,16 @@
     "winston": "^3.17.0"
   },
   "imports": {
-    "#controllers/*": "./src/controllers/*",
     "#database/*": "./src/database/*",
     "#dtos/*": "./src/dtos/*",
-    "#middlewares/*": "./src/middlewares/*",
+    "#handlers/*": "./src/handlers/*",
+    "#controllers/*": "./src/handlers/controllers/*",
+    "#middlewares/*": "./src/handlers/middlewares/*",
+    "#services/*": "./src/handlers/services/*",
     "#models/*": "./src/models/*",
     "#packages/*": "./src/packages/*",
     "#routes/*": "./src/routes/*",
     "#server/*": "./src/server/*",
-    "#services/*": "./src/services/*",
     "#utils/*": "./src/utils/*"
   }
 }
