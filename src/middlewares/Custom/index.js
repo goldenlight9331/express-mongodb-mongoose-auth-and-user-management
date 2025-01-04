@@ -4,7 +4,7 @@ import { handleError, logger, dotEnv } from '#utils/index.js';
 const { JWT_SECRET } = dotEnv;
 
 export const validate = {
-  authPayload: schema => async (req, res, next) => {
+  dto: schema => async (req, res, next) => {
     try {
       const { value, error } = schema.validate(req.body, { abortEarly: false });
 

@@ -31,13 +31,13 @@
   "imports": {
     "#controllers/*": "./src/controllers/*",
     "#database/*": "./src/database/*",
+    "#dtos/*": "./src/dtos/*",
     "#middlewares/*": "./src/middlewares/*",
     "#models/*": "./src/models/*",
     "#packages/*": "./src/packages/*",
     "#routes/*": "./src/routes/*",
     "#server/*": "./src/server/*",
     "#services/*": "./src/services/*",
-    "#utils/*": "./src/utils/*",
-    "#validations/*": "./src/validations/*"
+    "#utils/*": "./src/utils/*"
   }
 }
