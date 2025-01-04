@@ -64,6 +64,7 @@ export const validate = {
 
   authRole: admin => (req, res, next) => {
     if (req.decoded.role !== admin) {
+      logger.error('Forbidden: Admin access required');
       return res
         .status(403)
         .json({ message: 'Forbidden: Admin access required' });
