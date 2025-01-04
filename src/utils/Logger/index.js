@@ -1,29 +1,43 @@
 import { winston } from '#packages/index.js';
 
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
+// Define levels and colors
+const logConfig = {
+  levels: {
+    error: 0,
+    warn: 1,
+    info: 2,
+    debug: 3,
+  },
+  colors: {
+    error: 'red',
+    warn: 'yellow',
+    info: 'green',
+    debug: 'blue',
+  },
 };
 
-const colors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-};
+winston.addColors(logConfig.colors);
 
-winston.addColors(colors);
-
-const format = winston.format.combine(
+const consoleFormat = winston.format.combine(
   winston.format.colorize({ all: true }),
-  winston.format.timestamp({ format: 'HH:mm:ss' }),
-  winston.format.printf(
-    ({ level, message, timestamp }) => `${timestamp} [${level}]: ${message}`,
-  ),
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+  winston.format.printf(({ level, message, timestamp, stack, ...meta }) => {
+    const metaString = Object.keys(meta).length
+      ? ` | Meta: ${JSON.stringify(meta)}`
+      : '';
+    const stackString = stack ? `\nStack: ${stack}` : '';
+    return `${timestamp} [${level}]: ${message}${metaString}${stackString}`;
+  }),
 );
 
 export const logger = winston.createLogger({
-  levels,
-  format,
-  transports: [new winston.transports.Console()],
+  levels: logConfig.levels,
+  transports: [
+    new winston.transports.Console({
+      format: consoleFormat,
+      level: process.env.NODE_ENV === 'production' ? 'warn' : 'debug',
+      handleExceptions: true,
+    }),
+  ],
+  exitOnError: false,
 });

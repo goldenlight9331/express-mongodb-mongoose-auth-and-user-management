@@ -7,7 +7,7 @@ const listenServer = app => {
   const server = createServer(app);
 
   server.listen(PORT || 5000, () => {
-    logger.info(`Server running on http://localhost:${PORT}`.cyan.bold);
+    logger.info(`The server is accessible at http://localhost:5000`.white.bold);
   });
 };
 
