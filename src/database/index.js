@@ -23,7 +23,7 @@ const connectDatabase = async () => {
     });
 
     db.on('disconnected', () => {
-      logger.warn('MongoDB disconnected'.red.bold);
+      logger.warn('MongoDB disconnected'.yellow.bold);
       isConnected = false;
     });
 
