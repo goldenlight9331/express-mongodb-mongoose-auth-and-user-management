@@ -29,8 +29,8 @@
     "winston": "^3.17.0"
   },
   "imports": {
-    "#config/*": "./src/config/*",
     "#controllers/*": "./src/controllers/*",
+    "#database/*": "./src/database/*",
     "#middlewares/*": "./src/middlewares/*",
     "#models/*": "./src/models/*",
     "#packages/*": "./src/packages/*",

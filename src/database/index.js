@@ -3,7 +3,7 @@ import { dotEnv, logger } from '#utils/index.js';
 
 let isConnected = false;
 
-export const connectDatabase = async () => {
+const connectDatabase = async () => {
   const { MONGO_URI } = dotEnv;
   if (isConnected) {
     logger.info('Using existing MongoDB connection'.magenta.bold);
@@ -37,3 +37,5 @@ export const connectDatabase = async () => {
     process.exit(1);
   }
 };
+
+export default connectDatabase;

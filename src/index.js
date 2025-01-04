@@ -1,13 +1,14 @@
 import { express } from '#packages/index.js';
-import { listenServer } from '#server/index.js';
-import { connectDatabase, configureRoutes } from '#config/index.js';
-import { setupMiddlewares } from '#middlewares/index.js';
+import listenServer from '#server/index.js';
+import connectDatabase from '#database/index.js';
+import { configMiddlewares } from '#middlewares/index.js';
+import configRoutes from '#routes/index.js';
 
 const app = express();
 
 connectDatabase();
-setupMiddlewares(app);
-configureRoutes(app);
+configMiddlewares(app);
+configRoutes(app);
 listenServer(app);
 
 export default app;

@@ -3,10 +3,12 @@ import { logger, dotEnv } from '#utils/index.js';
 
 const { PORT } = dotEnv;
 
-export const listenServer = app => {
+const listenServer = app => {
   const server = createServer(app);
 
   server.listen(PORT || 5000, () => {
     logger.info(`Server running on http://localhost:${PORT}`.cyan.bold);
   });
 };
+
+export default listenServer;
