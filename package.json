@@ -1,5 +1,6 @@
 {
   "name": "node-user-management",
+  "author": "Sharjeel Faiq",
   "version": "1.0.0",
   "type": "module",
   "license": "ISC",
