@@ -41,7 +41,7 @@ export const AuthController = {
       res.status(error.status).json({ message: error.message });
     }
   },
-  signOut: async (req, res) => {
+  signOut: async (_, res) => {
     try {
       res.clearCookie('token').status(200).json({ message: 'Signed out' });
     } catch (error) {
