@@ -33,7 +33,6 @@
     "#database/*": "./src/database/*",
     "#dtos/*": "./src/dtos/*",
     "#handlers/*": "./src/handlers/*",
-    "#controllers/*": "./src/handlers/controllers/*",
     "#services/*": "./src/handlers/services/*",
     "#middlewares/*": "./src/middlewares/*",
     "#models/*": "./src/models/*",
