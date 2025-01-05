@@ -1,5 +1,5 @@
 import { express } from '#packages/index.js';
-import { AuthController } from '#handlers/index.js';
+import { AuthController } from '#controllers/index.js';
 import { validate } from '#middlewares/index.js';
 import dtos from '#dtos/index.js';
 
