@@ -1,35 +1,34 @@
-# API Endpoints Documentation
+# API Endpoints Documentation 📚
 
 **Author:** Sharjeel Faiq  
-**Description:** This document provides an overview of the API endpoints for
-user authentication, email verification, and user and site management.
+**Description:** Overview of API endpoints for **authentication**, and **user management**.
 
 ---
 
-## Table of Contents
+## Table of Contents 🗂️
 
-1. [Auth Endpoints](#auth-endpoints)
-1. [User Endpoints](#user-endpoints)
-
----
-
-## Auth Endpoints
-
-| **Method** | **Endpoint**           | **Description**                                    |
-| ---------- | ---------------------- | -------------------------------------------------- |
-| `POST`     | `/api/v1/auth/signup`  | Registers a new user account.                      |
-| `POST`     | `/api/v1/auth/signin`  | Authenticates a user and provides a session token. |
-| `POST`     | `/api/v1/auth/signout` | Logs out the authenticated user.                   |
+1. [Authentication Endpoints](#authentication-endpoints)
+2. [User Management Endpoints](#user-management-endpoints)
 
 ---
 
-## User Endpoints
+## Authentication Endpoints 🔑
 
-| **Method** | **Endpoint**           | **Description**                                    |
-| ---------- | ---------------------- | -------------------------------------------------- |
-| `GET`      | `/api/v1/users`        | Retrieves a list of all users.                     |
-| `GET`      | `/api/v1/users/:id`    | Retrieves a specific user by ID.                   |
-| `PUT`      | `/api/v1/users/:id`    | Updates a specific user by ID.                     |
-| `DELETE`   | `/api/v1/users/:id`    | Deletes a specific user by ID.                     |
+| **Method** | **Endpoint**             | **Description**                                      |
+| ---------- | ------------------------ | ---------------------------------------------------- |
+| `POST`     | `/api/v1/auth/signup`    | Register a new user account.                         |
+| `POST`     | `/api/v1/auth/signin`    | Authenticate user and return session token.          |
+| `POST`     | `/api/v1/auth/signout`   | Log out the authenticated user.                      |
+
+---
+
+## User Management Endpoints 👤
+
+| **Method** | **Endpoint**             | **Description**                                      |
+| ---------- | ------------------------ | ---------------------------------------------------- |
+| `GET`      | `/api/v1/users`          | Retrieve a list of all users.                        |
+| `GET`      | `/api/v1/users/:id`      | Retrieve details of a user by ID.                    |
+| `PUT`      | `/api/v1/users/:id`      | Update a user's details by ID.                       |
+| `DELETE`   | `/api/v1/users/:id`      | Delete a user by ID.                                 |
 
 ---
