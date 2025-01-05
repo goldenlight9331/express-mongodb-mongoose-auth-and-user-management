@@ -1,4 +1,3 @@
-# Node User Management
 # Summary of [sharjeelfaiq/express-mongo-auth-and-user-management](https://github.com/sharjeelfaiq/express-mongo-auth-and-user-management)
 
 This GitHub repository is a template for a Node.js application that provides user management and authentication functionality using Express.js and MongoDB. The project aims to serve as a starting point for developers who need to implement user-related features in their web applications.
