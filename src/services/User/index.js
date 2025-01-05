@@ -16,7 +16,7 @@ export const UsersService = {
       return handleError(error, 'Failed to fetch users');
     }
   },
-  getById: async userId => {
+  getById: async (userId) => {
     try {
       const user = await User.findById(userId);
 
@@ -45,7 +45,7 @@ export const UsersService = {
       return handleError(error, `Failed to update user by id: ${userId}`);
     }
   },
-  deleteById: async userId => {
+  deleteById: async (userId) => {
     try {
       const user = await User.findByIdAndDelete(userId);
 

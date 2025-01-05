@@ -3,7 +3,7 @@ import { handleError } from '#utils/index.js';
 import { User } from '#models/index.js';
 
 export const AuthService = {
-  signUp: async userData => {
+  signUp: async (userData) => {
     try {
       const { email } = userData;
 

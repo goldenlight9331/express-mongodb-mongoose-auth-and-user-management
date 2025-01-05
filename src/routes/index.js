@@ -24,7 +24,7 @@ v1Router.use('*', (_, res) => {
   res.status(404).json({ message: 'Endpoint not found' });
 });
 
-const configRoutes = app => {
+const configRoutes = (app) => {
   app.use(rootRouter);
 };
 

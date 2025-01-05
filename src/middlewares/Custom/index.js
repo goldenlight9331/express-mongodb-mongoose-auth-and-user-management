@@ -4,12 +4,12 @@ import { handleError, logger, dotEnv } from '#utils/index.js';
 const { JWT_SECRET } = dotEnv;
 
 export const validate = {
-  dto: schema => async (req, res, next) => {
+  dto: (schema) => async (req, res, next) => {
     try {
       const { value, error } = schema.validate(req.body, { abortEarly: false });
 
       if (error) {
-        const errorMessages = error.details.map(detail => detail.message);
+        const errorMessages = error.details.map((detail) => detail.message);
 
         logger.warn({
           message: 'Validation failed',
@@ -62,7 +62,7 @@ export const validate = {
     }
   },
 
-  authRole: admin => (req, res, next) => {
+  authRole: (admin) => (req, res, next) => {
     if (req.decoded.role !== admin) {
       logger.error('Forbidden: Admin access required');
       return res
