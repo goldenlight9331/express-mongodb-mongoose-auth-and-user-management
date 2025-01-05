@@ -7,6 +7,7 @@ This GitHub repository is a template for a Node.js application that provides use
 - **Login and Logout**: Facilitates user authentication and session management.
 - **Password Hashing**: Ensures secure storage of user passwords.
 - **Token-Based Authentication**: Utilizes JSON Web Tokens (JWT) for secure access.
+- **Cookies as Token Carriers**: Implements cookies to store and manage authentication tokens.
 - **CRUD Operations**: Supports Create, Read, Update, and Delete functionalities for user management.
 
 ## Technology Stack
