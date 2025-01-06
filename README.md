@@ -10,7 +10,7 @@ The purpose of the **express-mongo-auth-and-user-management** project is to prov
 
 - **Simplify User Authentication**: Offer a straightforward way to manage user registration, login, and logout processes.
 - **Enhance Security**: Implement secure practices such as password hashing and **JWT (JSON Web Tokens)** for authentication, ensuring user data is protected 🔒.
-- **Enable User Management**: Provide **CRUD (Create, Read, Update, Delete)** functionalities for managing user accounts, allowing applications to easily handle user data.
+- **Enable User Management**: Provide **CRUD (Create, Read, Update, Delete)** functionalities for managing user accounts, allowing applications to handle user data easily.
 - **Serve as a Starter Template**: Act as a boilerplate for developers, saving time and effort in setting up user authentication systems from scratch.
 
 Overall, this project is geared towards helping developers quickly integrate robust user management features into their applications using **Express.js** and **MongoDB**.
