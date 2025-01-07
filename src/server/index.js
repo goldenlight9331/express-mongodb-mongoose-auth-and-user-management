@@ -1,7 +1,7 @@
 import { createServer } from '#packages/index.js';
-import { logger, dotEnv } from '#utils/index.js';
+import { logger, env } from '#utils/index.js';
 
-const { PORT } = dotEnv;
+const { PORT } = env;
 
 const listenServer = (app) => {
   const server = createServer(app);

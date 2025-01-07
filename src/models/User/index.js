@@ -1,7 +1,7 @@
 import { mongoose, bcrypt, jwt, createError } from '#packages/index.js';
-import { handleError, dotEnv } from '#utils/index.js';
+import { handleError, env } from '#utils/index.js';
 
-const { JWT_SECRET } = dotEnv;
+const { JWT_SECRET } = env;
 
 const UserSchema = new mongoose.Schema({
   name: {

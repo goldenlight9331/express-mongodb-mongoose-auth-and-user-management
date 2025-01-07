@@ -1,10 +1,10 @@
 import { mongoose } from '#packages/index.js';
-import { dotEnv, logger } from '#utils/index.js';
+import { env, logger } from '#utils/index.js';
 
 let isConnected = false;
 
 const connectDatabase = async () => {
-  const { MONGO_URI } = dotEnv;
+  const { MONGO_URI } = env;
   if (isConnected) {
     logger.info('Using existing MongoDB connection'.magenta.bold);
     return;

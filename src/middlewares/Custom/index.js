@@ -1,7 +1,7 @@
 import { jwt } from '#packages/index.js';
-import { handleError, logger, dotEnv } from '#utils/index.js';
+import { handleError, logger, env } from '#utils/index.js';
 
-const { JWT_SECRET } = dotEnv;
+const { JWT_SECRET } = env;
 
 export const validate = {
   dto: (schema) => async (req, res, next) => {

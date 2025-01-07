@@ -1,7 +1,7 @@
 import { AuthService } from '#services/index.js';
-import { dotEnv } from '#utils/index.js';
+import { env } from '#utils/index.js';
 
-const { CookieKey, CookieSameSite, CookieSecure, CookieMaxAge } = dotEnv;
+const { CookieKey, CookieSameSite, CookieSecure, CookieMaxAge } = env;
 
 const cookieOptions = {
   httpOnly: CookieKey,
