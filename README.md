@@ -32,6 +32,7 @@ Overall, this project is geared towards helping developers quickly integrate rob
 - **Node.js**: Server-side JavaScript runtime.
 - **Express.js**: Web framework for building APIs.
 - **MongoDB**: NoSQL database for fast and scalable data storage.
+- **Mongoose**: ODM (Object Data Modeling) library for MongoDB.
 - **JWT (JSON Web Tokens)**: Secure token-based authentication.
 
 ---
