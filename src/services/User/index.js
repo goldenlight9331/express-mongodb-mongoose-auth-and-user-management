@@ -1,11 +1,14 @@
 import { createError } from '#packages/index.js';
 import { handleError } from '#utils/index.js';
-import { User } from '#models/index.js';
+import { dataAccess } from '#dataAccess/index.js';
+
+const { fetchAllUsers, findUserById, updateUserById, deleteUserById } =
+  dataAccess;
 
 export const UsersService = {
   getAll: async () => {
     try {
-      const users = await User.find();
+      const users = await fetchAllUsers();
 
       if (!users.length) {
         throw createError(404, 'Users not found');
@@ -18,7 +21,7 @@ export const UsersService = {
   },
   getById: async (userId) => {
     try {
-      const user = await User.findById(userId);
+      const user = await findUserById(userId);
 
       if (!user) {
         throw createError(404, 'User not found');
@@ -31,10 +34,7 @@ export const UsersService = {
   },
   updateById: async (userId, userData) => {
     try {
-      const user = await User.findByIdAndUpdate(userId, userData, {
-        new: true,
-        upsert: true,
-      });
+      const user = await updateUserById(userId, userData);
 
       if (!user) {
         throw createError(404, 'User not found');
@@ -47,7 +47,7 @@ export const UsersService = {
   },
   deleteById: async (userId) => {
     try {
-      const user = await User.findByIdAndDelete(userId);
+      const user = await deleteUserById(userId);
 
       if (!user) {
         throw createError(404, 'User not found');

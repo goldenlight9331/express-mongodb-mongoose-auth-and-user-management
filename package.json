@@ -26,11 +26,11 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.3",
-    "prettier": "^3.3.3",
     "winston": "^3.17.0"
   },
   "imports": {
     "#controllers/*": "./src/controllers/*",
+    "#dataAccess/*": "./src/dataAccess/*",
     "#database/*": "./src/database/*",
     "#dtos/*": "./src/dtos/*",
     "#middlewares/*": "./src/middlewares/*",

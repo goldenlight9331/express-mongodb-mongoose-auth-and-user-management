@@ -1,18 +1,20 @@
 import { createError } from '#packages/index.js';
 import { handleError } from '#utils/index.js';
-import { User } from '#models/index.js';
+import { dataAccess } from '#dataAccess/index.js';
+
+const { createUser, findUserByEmail } = dataAccess;
 
 export const AuthService = {
   signUp: async (userData) => {
     try {
       const { email } = userData;
 
-      const existingUser = await User.findOne({ email });
+      const existingUser = await findUserByEmail(email);
       if (existingUser) {
         throw createError(400, 'User with the provided email already exists');
       }
 
-      const user = await User.create(userData);
+      const user = await createUser(userData);
       const token = user.generateAuthToken();
 
       const result = {
@@ -29,7 +31,7 @@ export const AuthService = {
   },
   signIn: async ({ email, password }) => {
     try {
-      const user = await User.findOne({ email });
+      const user = await findUserByEmail(email);
       if (!user) throw createError(401, 'Invalid credentials');
 
       await user.comparePassword(password);

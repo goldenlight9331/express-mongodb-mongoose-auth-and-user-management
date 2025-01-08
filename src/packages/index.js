@@ -12,7 +12,6 @@ import Joi from 'joi';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
-import prettier from 'prettier';
 import winston from 'winston';
 
 export {
@@ -30,6 +29,5 @@ export {
   jwt,
   mongoose,
   morgan,
-  prettier,
   winston,
 };
