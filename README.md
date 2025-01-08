@@ -1,4 +1,4 @@
-# Summary of [sharjeelfaiq/express-mongo-auth-and-user-management](https://github.com/sharjeelfaiq/express-mongo-auth-and-user-management)
+# Summary of [sharjeelfaiq/express-mongodb-mongoose-auth-and-user-management](https://github.com/sharjeelfaiq/express-mongodb-mongoose-auth-and-user-management)
 
 This repository provides a **Node.js** template that implements **user authentication** and **management** using **Express.js** and **MongoDB**. It's designed to be a starting point for developers building web applications that require user-related functionalities like registration, login, and management.
 
@@ -6,7 +6,7 @@ This repository provides a **Node.js** template that implements **user authentic
 
 ## Purpose of the Project 🎯
 
-The purpose of the **express-mongo-auth-and-user-management** project is to provide a foundational template for developers looking to implement user authentication and management features in their web applications. Specifically, it aims to:
+The purpose of the **express-mongodb-mongoose-auth-and-user-management** project is to provide a foundational template for developers looking to implement user authentication and management features in their web applications. Specifically, it aims to:
 
 - **Simplify User Authentication**: Offer a straightforward way to manage user registration, login, and logout processes.
 - **Enhance Security**: Implement secure practices such as password hashing and **JWT (JSON Web Tokens)** for authentication, ensuring user data is protected 🔒.

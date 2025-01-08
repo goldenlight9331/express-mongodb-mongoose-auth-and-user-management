@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "4ddf3956-4da7-4834-972a-f4dd2fc47b50",
-		"name": "express-mongo-auth-and-user-management",
+		"name": "express-mongodb-mongoose-auth-and-user-management",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "16282282"
 	},
