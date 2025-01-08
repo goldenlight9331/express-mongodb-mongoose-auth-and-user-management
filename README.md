@@ -23,7 +23,6 @@ Overall, this project is geared towards helping developers quickly integrate rob
 - **Login/Logout**: Seamless authentication and session handling.
 - **Password Hashing**: Keeps user passwords safe and encrypted 🔒.
 - **JWT Authentication**: Uses **JSON Web Tokens** for secure access and sessions 🔑.
-- **Cookie Storage**: Stores authentication tokens in cookies 🍪.
 - **CRUD Operations**: Full **Create, Read, Update, Delete** functionalities for managing users ✍️.
 
 ---
