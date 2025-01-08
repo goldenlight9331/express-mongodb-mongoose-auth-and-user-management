@@ -46,7 +46,6 @@ Licensed under the **MIT License**, enabling free usage, modification, and distr
 This template is perfect for anyone looking to integrate **authentication** and **user management** into their **Node.js** apps quickly and securely!
 
 ---
-
 ## Project Structure 🗂
 
 ```plaintext
@@ -55,30 +54,36 @@ root/
 ├── node_modules/                       # Dependency packages
 │
 ├── src/                                # Application source code
-│   ├── controllers/                # Controllers for API endpoints
-│   │   ├── Auth/                   # Authentication-related logic
+│   ├── controllers/                    # Controllers for API endpoints
+│   │   ├── Auth/                       # Authentication-related logic
 │   │   │   └── index.js
-│   │   ├── User/                   # User-related logic
+│   │   ├── User/                       # User-related logic
 │   │   │   └── index.js
 │   │   └── index.js
 │   ├── database/                       # Database connection and utilities
 │   │   └── index.js
+│   ├── dataAccess/                     # Data Access Objects (DAOs) for interacting with the database
+│   │   └── index.js
 │   ├── dtos/                           # Data Transfer Objects (DTOs)
 │   │   └── index.js
-│   ├── middlewares/                   # Middlewares for handling requests
+│   ├── middlewares/                    # Middlewares for handling requests
 │   │   └── index.js
 │   ├── models/                         # MongoDB models (user schema, etc.)
 │   │   └── index.js
 │   ├── packages/                       # External libraries or helpers
 │   │   └── index.js
 │   ├── routes/                         # API routes for handling requests
-│   │   └── index.js
-│   ├── server/                         # Application server setup
-│   │   └── index.js
-│   ├── services/                   # Services for handling business logic
-│   │   ├── Auth/                   # Authentication services
+│   │   ├── Auth/                       # Authentication-related routes
 │   │   │   └── index.js
-│   │   ├── User/                   # User services
+│   │   ├── User/                       # User-related routes
+│   │   │   └── index.js
+│   │   └── index.js│   
+|   ├── server/                         # Application server setup
+│   │   └── index.js
+│   ├── services/                       # Services for handling business logic
+│   │   ├── Auth/                       # Authentication services
+│   │   │   └── index.js
+│   │   ├── User/                       # User services
 │   │   │   └── index.js
 │   │   └── index.js
 │   ├── utils/                          # Utility functions for the app
@@ -92,3 +97,4 @@ root/
 ├── endpoints.md                        # API documentation for endpoints
 ├── package-lock.json                   # NPM package-lock file
 └── package.json                        # NPM dependencies and project metadata
+```
