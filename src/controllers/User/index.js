@@ -1,4 +1,4 @@
-import { UsersService } from '#services/index.js';
+import { UsersService } from "#services/index.js";
 
 export const UsersController = {
   getAll: async (_, res) => {

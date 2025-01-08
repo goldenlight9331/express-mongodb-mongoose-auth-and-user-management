@@ -1,5 +1,5 @@
-import { jwt } from '#packages/index.js';
-import { handleError, logger, env } from '#utils/index.js';
+import { jwt } from "#packages/index.js";
+import { handleError, logger, env } from "#utils/index.js";
 
 const { JWT_SECRET } = env;
 
@@ -12,7 +12,7 @@ export const validate = {
         const errorMessages = error.details.map((detail) => detail.message);
 
         logger.warn({
-          message: 'Validation failed',
+          message: "Validation failed",
           method: req.method,
           url: req.originalUrl,
           errors: errorMessages,
@@ -25,7 +25,7 @@ export const validate = {
 
       next();
     } catch (error) {
-      return handleError(error, 'Failed to validate request');
+      return handleError(error, "Failed to validate request");
     }
   },
 
@@ -34,10 +34,10 @@ export const validate = {
       const token = req.cookies.token;
 
       if (!token) {
-        logger.error('Unauthorized: No token provided');
+        logger.error("Unauthorized: No token provided");
         return res
           .status(401)
-          .json({ error: 'Unauthorized: No token provided' });
+          .json({ error: "Unauthorized: No token provided" });
       }
 
       try {
@@ -46,28 +46,28 @@ export const validate = {
         req.decoded = decoded;
         next();
       } catch (err) {
-        if (err.name === 'TokenExpiredError') {
-          res.clearCookie('token');
-          logger.error('Session expired. Please log in again.');
+        if (err.name === "TokenExpiredError") {
+          res.clearCookie("token");
+          logger.error("Session expired. Please log in again.");
           return res
             .status(401)
-            .json({ message: 'Session expired. Please log in again.' });
+            .json({ message: "Session expired. Please log in again." });
         }
 
-        logger.error('Invalid token');
-        return res.status(403).json({ message: 'Invalid token' });
+        logger.error("Invalid token");
+        return res.status(403).json({ message: "Invalid token" });
       }
     } catch (error) {
-      return handleError(error, 'Failed to validate token');
+      return handleError(error, "Failed to validate token");
     }
   },
 
   authRole: (admin) => (req, res, next) => {
     if (req.decoded.role !== admin) {
-      logger.error('Forbidden: Admin access required');
+      logger.error("Forbidden: Admin access required");
       return res
         .status(403)
-        .json({ message: 'Forbidden: Admin access required' });
+        .json({ message: "Forbidden: Admin access required" });
     }
 
     next();

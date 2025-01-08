@@ -1,4 +1,4 @@
-import { winston } from '#packages/index.js';
+import { winston } from "#packages/index.js";
 
 export const createLogger = () => {
   // Define levels and colors
@@ -10,10 +10,10 @@ export const createLogger = () => {
       debug: 3,
     },
     colors: {
-      error: 'red',
-      warn: 'yellow',
-      info: 'green',
-      debug: 'blue',
+      error: "red",
+      warn: "yellow",
+      info: "green",
+      debug: "blue",
     },
   };
 
@@ -21,12 +21,12 @@ export const createLogger = () => {
 
   const consoleFormat = winston.format.combine(
     winston.format.colorize({ all: true }),
-    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
     winston.format.printf(({ level, message, timestamp, stack, ...meta }) => {
       const metaString = Object.keys(meta).length
         ? ` | Meta: ${JSON.stringify(meta)}`
-        : '';
-      const stackString = stack ? `\nStack: ${stack}` : '';
+        : "";
+      const stackString = stack ? `\nStack: ${stack}` : "";
       return `${timestamp} [${level}]: ${message}${metaString}${stackString}`;
     }),
   );
@@ -36,7 +36,7 @@ export const createLogger = () => {
     transports: [
       new winston.transports.Console({
         format: consoleFormat,
-        level: process.env.NODE_ENV === 'production' ? 'warn' : 'debug',
+        level: process.env.NODE_ENV === "production" ? "warn" : "debug",
         handleExceptions: true,
       }),
     ],

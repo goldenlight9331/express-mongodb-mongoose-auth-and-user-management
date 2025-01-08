@@ -1,5 +1,5 @@
-import { createServer } from '#packages/index.js';
-import { logger, env } from '#utils/index.js';
+import { createServer } from "#packages/index.js";
+import { logger, env } from "#utils/index.js";
 
 const { PORT } = env;
 

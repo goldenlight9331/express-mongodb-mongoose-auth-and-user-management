@@ -1,4 +1,4 @@
-import { dotenv } from '#packages/index.js';
+import { dotenv } from "#packages/index.js";
 
 dotenv.config();
 

@@ -1,5 +1,5 @@
-import { AuthService } from '#services/index.js';
-import { env } from '#utils/index.js';
+import { AuthService } from "#services/index.js";
+import { env } from "#utils/index.js";
 
 const { CookieKey, CookieSameSite, CookieSecure, CookieMaxAge } = env;
 
@@ -20,7 +20,7 @@ export const AuthController = {
 
       res
         .status(201)
-        .cookie('token', token, cookieOptions)
+        .cookie("token", token, cookieOptions)
         .json({ ...result, token: undefined });
     } catch (error) {
       res.status(error.status).json({ message: error.message });
@@ -35,7 +35,7 @@ export const AuthController = {
 
       res
         .status(200)
-        .cookie('token', token, cookieOptions)
+        .cookie("token", token, cookieOptions)
         .json({ ...result, token: undefined });
     } catch (error) {
       res.status(error.status).json({ message: error.message });
@@ -43,7 +43,7 @@ export const AuthController = {
   },
   signOut: async (_, res) => {
     try {
-      res.clearCookie('token').status(200).json({ message: 'Signed out' });
+      res.clearCookie("token").status(200).json({ message: "Signed out" });
     } catch (error) {
       res.status(error.status).json({ message: error.message });
     }

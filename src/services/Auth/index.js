@@ -1,6 +1,6 @@
-import { createError } from '#packages/index.js';
-import { handleError } from '#utils/index.js';
-import { dataAccess } from '#dataAccess/index.js';
+import { createError } from "#packages/index.js";
+import { handleError } from "#utils/index.js";
+import { dataAccess } from "#dataAccess/index.js";
 
 const { createUser, findUserByEmail } = dataAccess;
 
@@ -11,7 +11,7 @@ export const AuthService = {
 
       const existingUser = await findUserByEmail(email);
       if (existingUser) {
-        throw createError(400, 'User with the provided email already exists');
+        throw createError(400, "User with the provided email already exists");
       }
 
       const user = await createUser(userData);
@@ -26,13 +26,13 @@ export const AuthService = {
 
       return result;
     } catch (error) {
-      return handleError(error, 'Failed to sign up user');
+      return handleError(error, "Failed to sign up user");
     }
   },
   signIn: async ({ email, password }) => {
     try {
       const user = await findUserByEmail(email);
-      if (!user) throw createError(401, 'Invalid credentials');
+      if (!user) throw createError(401, "Invalid credentials");
 
       await user.comparePassword(password);
       const token = user.generateAuthToken();
@@ -46,7 +46,7 @@ export const AuthService = {
 
       return result;
     } catch (error) {
-      return handleError(error, 'Failed to sign in user');
+      return handleError(error, "Failed to sign in user");
     }
   },
 };

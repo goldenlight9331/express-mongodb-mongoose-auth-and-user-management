@@ -1,4 +1,4 @@
-import { User } from '#models/index.js';
+import { User } from "#models/index.js";
 
 export const dataAccess = {
   createUser: async (userData) => await User.create(userData),

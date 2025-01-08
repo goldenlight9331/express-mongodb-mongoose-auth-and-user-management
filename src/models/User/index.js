@@ -1,41 +1,41 @@
-import { mongoose, bcrypt, jwt, createError } from '#packages/index.js';
-import { handleError, env } from '#utils/index.js';
+import { mongoose, bcrypt, jwt, createError } from "#packages/index.js";
+import { handleError, env } from "#utils/index.js";
 
 const { JWT_SECRET } = env;
 
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Full name is required'],
+    required: [true, "Full name is required"],
     trim: true,
-    minlength: [2, 'First name must be at least 2 characters long'],
+    minlength: [2, "First name must be at least 2 characters long"],
   },
   email: {
     type: String,
-    required: [true, 'Email is required'],
+    required: [true, "Email is required"],
     unique: true,
     lowercase: true,
     trim: true,
-    match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address'],
+    match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
-    minlength: [6, 'Password must be at least 6 characters long'],
+    required: [true, "Password is required"],
+    minlength: [6, "Password must be at least 6 characters long"],
   },
   role: {
     type: String,
-    required: [true, 'Role is required'],
+    required: [true, "Role is required"],
     enum: {
-      values: ['admin', 'user'],
-      message: 'Role must be either admin, or user',
+      values: ["admin", "user"],
+      message: "Role must be either admin, or user",
     },
-    default: 'user',
+    default: "user",
   },
 });
 
-UserSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
+UserSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
   }
@@ -49,8 +49,8 @@ UserSchema.methods.generateAuthToken = function () {
     },
     JWT_SECRET,
     {
-      expiresIn: '1h',
-      algorithm: 'HS256',
+      expiresIn: "1h",
+      algorithm: "HS256",
     },
   );
   return token;
@@ -61,13 +61,13 @@ UserSchema.methods.comparePassword = async function (password) {
     const isMatch = await bcrypt.compare(password, this.password);
 
     if (!isMatch) {
-      throw createError(401, 'Invalid credentials');
+      throw createError(401, "Invalid credentials");
     }
 
     return isMatch;
   } catch (error) {
-    throw handleError(error, 'Failed to compare passwords');
+    throw handleError(error, "Failed to compare passwords");
   }
 };
 
-export const User = mongoose.model('users', UserSchema);
+export const User = mongoose.model("users", UserSchema);

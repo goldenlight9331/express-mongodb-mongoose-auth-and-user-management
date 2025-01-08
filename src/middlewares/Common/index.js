@@ -1,15 +1,15 @@
-import { morgan, cors, express, cookieParser } from '#packages/index.js';
+import { morgan, cors, express, cookieParser } from "#packages/index.js";
 
 const corsOptions = {
   origin: true,
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 };
 
 export const applyMiddlewares = (app) => {
   app.use(express.json());
   app.use(cors(corsOptions));
   app.use(cookieParser());
-  app.use(morgan('dev'));
+  app.use(morgan("dev"));
   app.use(express.urlencoded({ extended: true }));
 };
