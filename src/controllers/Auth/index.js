@@ -1,15 +1,6 @@
 import { AuthService } from "#services/index.js";
 import { env } from "#utils/index.js";
 
-const { CookieKey, CookieSameSite, CookieSecure, CookieMaxAge } = env;
-
-const cookieOptions = {
-  httpOnly: CookieKey,
-  secure: CookieSecure,
-  sameSite: CookieSameSite,
-  maxAge: CookieMaxAge,
-};
-
 export const AuthController = {
   signUp: async (req, res) => {
     try {
@@ -20,10 +11,12 @@ export const AuthController = {
 
       res
         .status(201)
-        .cookie("token", token, cookieOptions)
+        .set("Authorization", `Bearer ${token}`)
         .json({ ...result, token: undefined });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res
+        .status(error?.status || 500)
+        .json({ message: error?.message || error });
     }
   },
   signIn: async (req, res) => {
@@ -35,17 +28,25 @@ export const AuthController = {
 
       res
         .status(200)
-        .cookie("token", token, cookieOptions)
+        .set("Authorization", `Bearer ${token}`)
         .json({ ...result, token: undefined });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res
+        .status(error?.status || 500)
+        .json({ message: error?.message || error });
     }
   },
   signOut: async (_, res) => {
     try {
-      res.clearCookie("token").status(200).json({ message: "Signed out" });
+      const token = req.headers.authorization?.split(" ")[1];
+
+      await AuthService.signOut(token);
+
+      res.status(200).json({ message: "Signed out" });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res
+        .status(error?.status || 500)
+        .json({ message: error?.message || error });
     }
   },
 };

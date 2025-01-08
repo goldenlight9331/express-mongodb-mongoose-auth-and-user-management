@@ -1,4 +1,4 @@
-import { User } from "#models/index.js";
+import { User, BlacklistedToken } from "#models/index.js";
 
 export const dataAccess = {
   createUser: async (userData) => await User.create(userData),
@@ -8,4 +8,5 @@ export const dataAccess = {
   updateUserById: async (id, userData) =>
     await User.findByIdAndUpdate(id, userData, { new: true, upsert: true }),
   deleteUserById: async (id) => await User.findByIdAndDelete(id),
+  expireToken: async (token) => await BlacklistedToken.create({ token }),
 };

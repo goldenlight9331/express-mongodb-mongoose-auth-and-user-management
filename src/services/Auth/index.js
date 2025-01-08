@@ -2,7 +2,7 @@ import { createError } from "#packages/index.js";
 import { handleError } from "#utils/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
-const { createUser, findUserByEmail } = dataAccess;
+const { createUser, findUserByEmail, expireToken } = dataAccess;
 
 export const AuthService = {
   signUp: async (userData) => {
@@ -47,6 +47,13 @@ export const AuthService = {
       return result;
     } catch (error) {
       return handleError(error, "Failed to sign in user");
+    }
+  },
+  signOut: async (token) => {
+    try {
+      await expireToken(token);
+    } catch (error) {
+      return handleError(error, "Failed to sign out user");
     }
   },
 };

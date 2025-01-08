@@ -31,7 +31,7 @@ export const validate = {
 
   authToken: async (req, res, next) => {
     try {
-      const token = req.cookies.token;
+      const token = req.headers.authorization?.split(" ")[1];
 
       if (!token) {
         logger.error("Unauthorized: No token provided");
@@ -47,7 +47,6 @@ export const validate = {
         next();
       } catch (err) {
         if (err.name === "TokenExpiredError") {
-          res.clearCookie("token");
           logger.error("Session expired. Please log in again.");
           return res
             .status(401)

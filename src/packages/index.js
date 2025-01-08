@@ -1,6 +1,5 @@
 import axios from "axios";
 import bcrypt from "bcryptjs";
-import cookieParser from "cookie-parser";
 import { createServer } from "node:http";
 import colors from "colors";
 import cors from "cors";
@@ -17,7 +16,6 @@ import winston from "winston";
 export {
   axios,
   bcrypt,
-  cookieParser,
   colors,
   cors,
   createError,

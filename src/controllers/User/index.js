@@ -7,7 +7,9 @@ export const UsersController = {
 
       res.status(201).json(result);
     } catch (error) {
-      res.status(error?.status).json({ message: error?.message });
+      res
+        .status(error?.status || 500)
+        .json({ message: error?.message || error });
     }
   },
   getById: async (req, res) => {
@@ -18,7 +20,9 @@ export const UsersController = {
 
       res.status(201).json(result);
     } catch (error) {
-      res.status(error?.status).json({ message: error?.message });
+      res
+        .status(error?.status || 500)
+        .json({ message: error?.message || error });
     }
   },
   updateById: async (req, res) => {
@@ -30,7 +34,9 @@ export const UsersController = {
 
       res.status(201).json(result);
     } catch (error) {
-      res.status(error?.status).json({ message: error?.message });
+      res
+        .status(error?.status || 500)
+        .json({ message: error?.message || error });
     }
   },
   deleteById: async (req, res) => {
@@ -41,7 +47,9 @@ export const UsersController = {
 
       res.status(201).json(result);
     } catch (error) {
-      res.status(error?.status).json({ message: error?.message });
+      res
+        .status(error?.status || 500)
+        .json({ message: error?.message || error });
     }
   },
 };
