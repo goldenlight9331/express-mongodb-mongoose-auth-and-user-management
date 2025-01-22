@@ -1,59 +1,94 @@
-import { createError } from "#packages/index.js";
-import { handleError } from "#utils/index.js";
+import utility from "#utility/index.js";
 import { dataAccess } from "#dataAccess/index.js";
+import { createError } from "#packages/index.js";
 
-const { createUser, findUserByEmail, expireToken } = dataAccess;
+const {
+  generateToken,
+  verifyToken,
+  // transporter,
+} = utility;
+const { save, fetch } = dataAccess;
+
+// const sendWelcomeEmail = async (toEmail) => {
+//   try {
+//     const mailOptions = {
+//       from: "ruhekat@outlook.com",
+//       to: toEmail,
+//       subject: "Welcome to Our Platform",
+//       text: `Hi,\n\nWelcome to our platform! We're excited to have you on board.\n\nBest Regards,\nYour Company`,
+//       html: `<p>Hi,</p><p>Welcome to our platform! We're excited to have you on board.</p><p>Best Regards,</p><p>Your Company</p>`,
+//     };
+
+//     const info = await transporter.sendMail(mailOptions);
+//     console.log(`Email sent: ${info.response}`);
+//   } catch (error) {
+//     console.error(`Error sending email: ${error.message}`);
+//     throw error;
+//   }
+// };
 
 export const AuthService = {
-  signUp: async (userData) => {
-    try {
-      const { email } = userData;
-
-      const existingUser = await findUserByEmail(email);
+  signUp: async ({ name, email, password }) => {
+      const existingUser = await fetch.userByEmail(email);
       if (existingUser) {
-        throw createError(400, "User with the provided email already exists");
+        throw createError(400, "A user with this email already exists.");
       }
 
-      const user = await createUser(userData);
-      const token = user.generateAuthToken();
+      const newUser = await save.user(name, email, password);
+      if (!newUser) {
+        throw createError(500, "Failed to create a new user.");
+      }
 
-      const result = {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        token,
-      };
+      // await sendWelcomeEmail(email);
 
-      return result;
-    } catch (error) {
-      return handleError(error, "Failed to sign up user");
-    }
+      return "User created successfully";
   },
-  signIn: async ({ email, password }) => {
-    try {
-      const user = await findUserByEmail(email);
-      if (!user) throw createError(401, "Invalid credentials");
+  signIn: async ({ email, password, isRemembered }) => {
+      const existingUser = await fetch.userByEmail(email);
+      if (!existingUser) {
+        throw createError(401, "Invalid email or password.");
+      }
 
-      await user.comparePassword(password);
-      const token = user.generateAuthToken();
-
-      const result = {
-        name: user.name,
-        email: user.email,
-        role: user.role,
+      const isValid = await user.comparePassword(password);
+      if (!isValid) {
+        throw createError(401, "Invalid email or password.");
+      }
+  
+      const token = generateToken(
+        isRemembered,
+        existingUser.role,
+        existingUser.id,
+      );
+      if (!token) {
+        throw createError(500, "An error occurred while generating the token.");
+      }
+  
+      return {
+        message: "Sign-in successful",
+        user: {
+          name: existingUser.name,
+        },
         token,
       };
-
-      return result;
-    } catch (error) {
-      return handleError(error, "Failed to sign in user");
-    }
   },
   signOut: async (token) => {
-    try {
-      await expireToken(token);
-    } catch (error) {
-      return handleError(error, "Failed to sign out user");
+    const decoded = await verifyToken(token);
+    if (!decoded) {
+      throw createError(401, "The provided token is invalid or expired.");
     }
+
+    const userId = decoded.userId;
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1-hour expiration
+    const blacklistedToken = await save.blacklistedToken(
+      token,
+      expiresAt,
+      userId,
+    );
+
+    if (!blacklistedToken) {
+      throw createError(500, "An error occurred while blacklisting the token.");
+    }
+
+    return "Sign-out successful. The token has been invalidated.";
   },
 };

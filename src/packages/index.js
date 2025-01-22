@@ -1,4 +1,3 @@
-import axios from "axios";
 import bcrypt from "bcryptjs";
 import { createServer } from "node:http";
 import colors from "colors";
@@ -14,7 +13,6 @@ import morgan from "morgan";
 import winston from "winston";
 
 export {
-  axios,
   bcrypt,
   colors,
   cors,

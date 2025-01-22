@@ -1,55 +1,37 @@
-import { UsersService } from "#services/index.js";
+import utility from "#utility/index.js";
+import { UserService } from "#services/index.js";
 
-export const UsersController = {
-  getAll: async (_, res) => {
-    try {
-      const result = await UsersService.getAll();
+const { asyncHandler } = utility;
 
-      res.status(201).json(result);
-    } catch (error) {
-      res
-        .status(error?.status || 500)
-        .json({ message: error?.message || error });
-    }
-  },
-  getById: async (req, res) => {
-    try {
-      const { userId } = req.params;
+export const UserController = {
+  getAll: asyncHandler(async (_, res) => {
+    const result = await UserService.getAll();
+    res.status(200).json(result);
+  }),
 
-      const result = await UsersService.getById(userId);
+  getById: asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const result = await UserService.getById(userId);
+    res.status(200).json(result);
+  }),
 
-      res.status(201).json(result);
-    } catch (error) {
-      res
-        .status(error?.status || 500)
-        .json({ message: error?.message || error });
-    }
-  },
-  updateById: async (req, res) => {
-    try {
-      const { userId } = req.params;
-      const userData = req.body;
+  updateById: asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const userData = req.body;
+    const result = await UserService.updateById(userId, userData);
+    res.status(200).json(result);
+  }),
 
-      const result = await UsersService.updateById(userId, userData);
+  updateByEmail: asyncHandler(async (req, res) => {
+    const { email } = req.params;
+    const { password } = req.body;
+    const result = await UserService.updateByEmail(email, password);
+    res.status(200).json(result);
+  }),
 
-      res.status(201).json(result);
-    } catch (error) {
-      res
-        .status(error?.status || 500)
-        .json({ message: error?.message || error });
-    }
-  },
-  deleteById: async (req, res) => {
-    try {
-      const { userId } = req.params;
-
-      const result = await UsersService.deleteById(userId);
-
-      res.status(201).json(result);
-    } catch (error) {
-      res
-        .status(error?.status || 500)
-        .json({ message: error?.message || error });
-    }
-  },
+  deleteById: asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const result = await UserService.deleteById(userId);
+    res.status(200).json(result);
+  }),
 };

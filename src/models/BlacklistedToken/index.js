@@ -8,7 +8,7 @@ const BlacklistedTokenSchema = new Schema({
     required: true,
     unique: true,
   },
-  blacklistedAt: {
+  expiresAt: {
     type: Date,
     default: Date.now,
   },
