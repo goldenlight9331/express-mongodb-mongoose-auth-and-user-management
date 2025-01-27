@@ -1,5 +1,5 @@
 import { mongoose, bcrypt, jwt, createError } from "#packages/index.js";
-import { handleError, env } from "#utils/index.js";
+import { handleError, env } from "#utility/index.js";
 
 const { JWT_SECRET } = env;
 
@@ -22,6 +22,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters long"],
+  },
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
   },
   role: {
     type: String,

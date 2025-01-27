@@ -86,7 +86,7 @@ root/
 │   │   ├── User/                       # User services
 │   │   │   └── index.js
 │   │   └── index.js
-│   ├── utils/                          # Utility functions for the app
+│   ├── utility/                          # Utility functions for the app
 │   │   └── index.js
 │   └── index.js                        # Main entry point for the app
 │

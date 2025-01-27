@@ -22,13 +22,6 @@ export const UserController = {
     res.status(200).json(result);
   }),
 
-  updateByEmail: asyncHandler(async (req, res) => {
-    const { email } = req.params;
-    const { password } = req.body;
-    const result = await UserService.updateByEmail(email, password);
-    res.status(200).json(result);
-  }),
-
   deleteById: asyncHandler(async (req, res) => {
     const { userId } = req.params;
     const result = await UserService.deleteById(userId);

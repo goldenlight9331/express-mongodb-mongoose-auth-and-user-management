@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "license": "ISC",
-  "main": "./src/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
     "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "format": "prettier --write \"src/**/*.{js,jsx}\""
   },
   "dependencies": {
@@ -36,9 +36,10 @@
     "#middlewares/*": "./src/middlewares/*",
     "#models/*": "./src/models/*",
     "#packages/*": "./src/packages/*",
+    "#public/*": "./src/public/*",
     "#routes/*": "./src/routes/*",
     "#server/*": "./src/server/*",
     "#services/*": "./src/services/*",
-    "#utils/*": "./src/utils/*"
+    "#utility/*": "./src/utility/*"
   }
 }

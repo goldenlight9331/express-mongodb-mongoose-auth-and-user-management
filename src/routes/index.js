@@ -3,6 +3,7 @@ import { express } from "#packages/index.js";
 import { validate } from "#middlewares/index.js";
 import authRoutes from "./Auth/index.js";
 import userRoutes from "./User/index.js";
+import emailRoutes from "./Email/index.js";
 
 const { logger } = utility;
 
@@ -16,10 +17,11 @@ rootRouter.get("/", (_, res) => {
 rootRouter.use("/api/v1", v1Router);
 
 v1Router.use("/auth", authRoutes);
+v1Router.use("/email", emailRoutes);
 v1Router.use(
   "/user",
   validate.authToken,
-  validate.authRole("ADMIN"),
+  validate.authRole("USER"),
   userRoutes,
 );
 
@@ -53,7 +55,6 @@ const configRoutes = (app) => {
     res.status(status).json({
       error: {
         status,
-        method: req.method,
         message,
       },
     });

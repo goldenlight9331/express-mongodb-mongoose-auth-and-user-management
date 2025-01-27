@@ -1,74 +1,61 @@
-import { jwt } from "#packages/index.js";
-import { handleError, logger, env } from "#utils/index.js";
+import utility from "#utility/index.js";
+import { createError } from "#packages/index.js";
 
-const { JWT_SECRET } = env;
+const { logger, asyncHandler } = utility;
 
 export const validate = {
-  dto: (schema) => async (req, res, next) => {
-    try {
+  dto: (schema) =>
+    asyncHandler(async (req, res, next) => {
       const { value, error } = schema.validate(req.body, { abortEarly: false });
 
       if (error) {
         const errorMessages = error.details.map((detail) => detail.message);
-
-        logger.warn({
-          message: "Validation failed",
-          method: req.method,
-          url: req.originalUrl,
-          errors: errorMessages,
-        });
-
-        return res.status(400).json({ errors: errorMessages });
+        throw createError(
+          400,
+          `Validation failed: ${errorMessages.join(", ")}`,
+        );
       }
 
       req.body = value;
+      next();
+    }),
+
+  authToken: asyncHandler(async (req, res, next) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader?.split(" ")[1];
+
+    if (!authHeader) {
+      throw createError(403, "Authorization header is missing.");
+    }
+
+    if (!token) {
+      throw createError(403, "Token is missing in the authorization header.");
+    }
+
+    const decoded = await utility.decodeToken(token);
+
+    if (!decoded) {
+      throw createError(401, "Invalid or expired token.");
+    }
+
+    req.user = decoded;
+    next();
+  }),
+
+  authRole: (authorizedRole) => {
+    return asyncHandler(async (req, res, next) => {
+      if (!req.user) {
+        throw createError(401, "Authentication required.");
+      }
+
+      if (req.user.role !== authorizedRole) {
+        throw createError(
+          403,
+          `Access denied: ${authorizedRole} role required.`,
+        );
+      }
 
       next();
-    } catch (error) {
-      return handleError(error, "Failed to validate request");
-    }
-  },
-
-  authToken: async (req, res, next) => {
-    try {
-      const token = req.headers.authorization?.split(" ")[1];
-
-      if (!token) {
-        logger.error("Unauthorized: No token provided");
-        return res
-          .status(401)
-          .json({ error: "Unauthorized: No token provided" });
-      }
-
-      try {
-        const decoded = await jwt.verify(token, JWT_SECRET);
-
-        req.decoded = decoded;
-        next();
-      } catch (err) {
-        if (err.name === "TokenExpiredError") {
-          logger.error("Session expired. Please log in again.");
-          return res
-            .status(401)
-            .json({ message: "Session expired. Please log in again." });
-        }
-
-        logger.error("Invalid token");
-        return res.status(403).json({ message: "Invalid token" });
-      }
-    } catch (error) {
-      return handleError(error, "Failed to validate token");
-    }
-  },
-
-  authRole: (admin) => (req, res, next) => {
-    if (req.decoded.role !== admin) {
-      logger.error("Forbidden: Admin access required");
-      return res
-        .status(403)
-        .json({ message: "Forbidden: Admin access required" });
-    }
-
-    next();
+    });
   },
 };
