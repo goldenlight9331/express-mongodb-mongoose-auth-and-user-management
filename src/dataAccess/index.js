@@ -23,6 +23,10 @@ export const dataAccess = {
     userById: async (id) => {
       return await User.findById(id);
     },
+
+    blacklistedToken: async (token) => {
+      return await BlacklistedToken.findOne({ token });
+    },
   },
 
   update: {
@@ -32,9 +36,17 @@ export const dataAccess = {
         upsert: true,
       });
     },
+
+    forgottenPassword: async (email, password) => {
+      return await User.findOneAndUpdate(
+        { email },
+        { password },
+        { new: true, upsert: true }
+      );
+    },
   },
 
-  delete: {
+  remove: {
     userById: async (id) => await User.findByIdAndDelete(id),
   },
 };
