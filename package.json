@@ -1,16 +1,22 @@
 {
-  "name": "express-mongodb-mongoose-auth-and-user-management",
-  "author": "Sharjeel Faiq",
+  "name": "domainname-backend",
   "version": "1.0.0",
   "type": "module",
   "license": "ISC",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "format": "prettier --write \"src/**/*.{js,jsx}\""
+    "start": "node src/index.js",
+    "format": "prettier --write \"src/**/*.{js,html}\""
+  },
+  "devDependencies": {
+    "colors": "^1.4.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.4.2"
   },
   "dependencies": {
+    "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -18,14 +24,9 @@
     "http-errors": "^2.0.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.16",
-    "mongoose": "^8.8.3"
-  },
-  "devDependencies": {
-    "colors": "^1.4.0",
-    "morgan": "^1.10.0",
-    "nodemon": "^3.1.9",
-    "prettier": "^3.4.2",
+    "mongoose": "^8.9.6",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.0",
     "winston": "^3.17.0"
   },
   "imports": {
@@ -33,13 +34,15 @@
     "#dataAccess/*": "./src/dataAccess/*",
     "#database/*": "./src/database/*",
     "#dtos/*": "./src/dtos/*",
+    "#env/*": "./src/env/*",
+    "#helpers/*": "./src/helpers/*",
     "#middlewares/*": "./src/middlewares/*",
     "#models/*": "./src/models/*",
     "#packages/*": "./src/packages/*",
-    "#public/*": "./src/public/*",
     "#routes/*": "./src/routes/*",
     "#server/*": "./src/server/*",
     "#services/*": "./src/services/*",
-    "#utility/*": "./src/utility/*"
+    "#utilities/*": "./src/utilities/*",
+    "#webSockets/*": "./src/webSockets/*"
   }
 }

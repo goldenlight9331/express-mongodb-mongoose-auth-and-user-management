@@ -1,17 +1,19 @@
-import utility from "#utility/index.js";
-import { express } from "#packages/index.js";
+import { path, dirname, express, fileURLToPath } from "#packages/index.js";
 import { validate } from "#middlewares/index.js";
+import utilities from "#utilities/index.js";
 import authRoutes from "./Auth/index.js";
 import userRoutes from "./User/index.js";
 import emailRoutes from "./Email/index.js";
 
-const { logger } = utility;
+const { logger } = utilities;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const rootRouter = express.Router();
 const v1Router = express.Router();
 
 rootRouter.get("/", (_, res) => {
-  res.json({ message: "Server is active..." });
+  res.json({ message: "Server is working..." });
 });
 
 rootRouter.use("/api/v1", v1Router);
@@ -21,7 +23,7 @@ v1Router.use("/email", emailRoutes);
 v1Router.use(
   "/user",
   validate.authToken,
-  validate.authRole("USER"),
+  validate.authRole("admin"),
   userRoutes,
 );
 
@@ -30,6 +32,7 @@ v1Router.use("*", (_, res) => {
 });
 
 const configRoutes = (app) => {
+  app.use("/uploads", express.static(path.join(__dirname, "../../uploads")));
   app.use(rootRouter);
 
   app.use((err, req, res, next) => {

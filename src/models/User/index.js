@@ -1,14 +1,21 @@
-import { mongoose, bcrypt, jwt, createError } from "#packages/index.js";
-import { handleError, env } from "#utility/index.js";
+import { mongoose, bcrypt, jwt } from "#packages/index.js";
+import env from "#env/index.js";
 
-const { JWT_SECRET } = env;
+const { JWT_SECRET, JWT_EXPIRY, JWT_ALGORITHM } = env;
+const { Schema, model } = mongoose;
 
-const UserSchema = new mongoose.Schema({
-  name: {
+const UserSchema = new Schema({
+  firstName: {
     type: String,
-    required: [true, "Full name is required"],
+    required: [true, "First name is required"],
     trim: true,
     minlength: [2, "First name must be at least 2 characters long"],
+  },
+  lastName: {
+    type: String,
+    required: [true, "Last name is required"],
+    trim: true,
+    minlength: [2, "Last name must be at least 2 characters long"],
   },
   email: {
     type: String,
@@ -23,18 +30,25 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters long"],
   },
+  role: {
+    type: String,
+    enum: {
+      values: ["admin", "user"],
+      message: "Role must be either admin or user",
+    },
+    required: true,
+  },
   isEmailVerified: {
     type: Boolean,
     default: false,
   },
-  role: {
+  isApproved: {
+    type: Boolean,
+    default: false,
+  },
+  profilePicture: {
     type: String,
-    required: [true, "Role is required"],
-    enum: {
-      values: ["admin", "user"],
-      message: "Role must be either admin, or user",
-    },
-    default: "user",
+    default: null,
   },
 });
 
@@ -53,8 +67,8 @@ UserSchema.methods.generateAuthToken = function () {
     },
     JWT_SECRET,
     {
-      expiresIn: "1h",
-      algorithm: "HS256",
+      expiresIn: JWT_EXPIRY,
+      algorithm: JWT_ALGORITHM,
     },
   );
   return token;
@@ -70,8 +84,8 @@ UserSchema.methods.comparePassword = async function (password) {
 
     return isMatch;
   } catch (error) {
-    throw handleError(error, "Failed to compare passwords");
+    throw "";
   }
 };
 
-export const User = mongoose.model("users", UserSchema);
+export const User = model("User", UserSchema);

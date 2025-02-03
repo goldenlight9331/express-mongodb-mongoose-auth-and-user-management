@@ -1,28 +1,27 @@
 import env from "#env/index.js";
-import utility from "#utility/index.js";
+import utilities from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 import { createError } from "#packages/index.js";
 import { sendVerificationEmail } from "./helpers.js";
 
 const {
-  generateToken,
+  transporter,
   generateAuthToken,
   generateVerificationToken,
   checkEmailVerification,
   decodeToken,
-  transporter,
-} = utility;
+} = utilities;
 const { USER_EMAIL } = env;
 const { save, fetch } = dataAccess;
 
 export const AuthService = {
-  signUp: async ({ name, email, password }) => {
+  signUp: async ({ firstName, lastName, email, password, role }) => {
     const existingUser = await fetch.userByEmail(email);
     if (existingUser) {
       throw createError(400, "A user with this email already exists.");
     }
 
-    const newUser = await save.user(name, email, password);
+    const newUser = await save.user(firstName, lastName, email, password, role);
     if (!newUser) {
       throw createError(500, "Failed to create a new user.");
     }
@@ -37,9 +36,10 @@ export const AuthService = {
       throw createError(500, "Failed to send the welcome email.");
     }
 
-    return "User created successfully";
+    return "User registered successfully";
   },
-  signIn: async ({ email, password, isRemembered }) => {
+
+  signIn: async ({ email, password }) => {
     const existingUser = await fetch.userByEmail(email);
     if (!existingUser) {
       throw createError(401, "Invalid email or password.");
@@ -50,28 +50,29 @@ export const AuthService = {
       throw createError(401, "Please verify your email before signing in.");
     }
 
-    const isValid = await user.comparePassword(password);
+    const isApproved = existingUser.isApproved;
+    if (!isApproved) {
+      throw createError(401, "User is not approved");
+    }
+
+    const isValid = await existingUser.comparePassword(password);
     if (!isValid) {
       throw createError(401, "Invalid email or password.");
     }
 
-    const token = generateToken(
-      isRemembered,
-      existingUser.role,
-      existingUser.id,
-    );
+    const token = generateAuthToken(existingUser.role, existingUser.id);
     if (!token) {
-      throw createError(500, "An error occurred while generating the token.");
+      throw createError(500, "Token generation failed");
     }
 
-    return {
-      message: "Sign-in successful",
-      user: {
-        name: existingUser.name,
-      },
+    const result = {
+      userId: existingUser._id,
       token,
     };
+
+    return result;
   },
+
   signOut: async (token) => {
     const decoded = await decodeToken(token);
     if (!decoded) {

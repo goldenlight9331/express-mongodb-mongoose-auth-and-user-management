@@ -46,6 +46,7 @@ Licensed under the **MIT License**, enabling free usage, modification, and distr
 This template is perfect for anyone looking to integrate **authentication** and **user management** into their **Node.js** apps quickly and securely!
 
 ---
+
 ## Project Structure 🗂
 
 ```plaintext
@@ -55,38 +56,56 @@ root/
 │
 ├── src/                                # Application source code
 │   ├── controllers/                    # Controllers for API endpoints
-│   │   ├── Auth/                       # Authentication-related logic
+│   │   ├── Auth/                       # Control request and respons flow for singup, sigin, signout, and forgot password
 │   │   │   └── index.js
-│   │   ├── User/                       # User-related logic
+│   │   ├── Email/                      # Control request and respons flow for sending emails
 │   │   │   └── index.js
-│   │   └── index.js
-│   ├── database/                       # Database connection and utilities
-│   │   └── index.js
+│   │   ├── User/                       # Control request and respons flow for user CRUD operations
+│   │   │   └── index.js
+│   │   └── index.js                    # Exports all controllers
 │   ├── dataAccess/                     # Data Access Objects (DAOs) for interacting with the database
+│   │   └── index.js
+│   ├── database/                       # Database connection setup
 │   │   └── index.js
 │   ├── dtos/                           # Data Transfer Objects (DTOs)
 │   │   └── index.js
+│   ├── env/                            # Exports the environment variables
+│   │   └── index.js
 │   ├── middlewares/                    # Middlewares for handling requests
-│   │   └── index.js
-│   ├── models/                         # MongoDB models (user schema, etc.)
-│   │   └── index.js
+│   │   ├── Common/                     # Common middlewares
+│   │   │   └── index.js
+│   │   ├── Custom/                     # Custom middlewares
+│   │   │   └── index.js
+│   │   └── index.js                    # Exports all middlewares
+│   ├── models/
+│   │   ├── BlackListedToken/           # Model for storing blacklisted tokens
+│   │   │   └── index.js
+│   │   ├── User/                       # Model for user data
+│   │   │   └── index.js
+│   │   └── index.js                    # Exports all models
+│   ├── multer/
+│   │   └── index.js                    # Multer configuration for file uploads
 │   ├── packages/                       # External libraries or helpers
 │   │   └── index.js
 │   ├── routes/                         # API routes for handling requests
 │   │   ├── Auth/                       # Authentication-related routes
 │   │   │   └── index.js
+│   │   ├── Email/                      # Email-related routes
+│   │   │   └── index.js
 │   │   ├── User/                       # User-related routes
 │   │   │   └── index.js
-│   │   └── index.js│   
+│   │   └── index.js                    # Exports all routes
 |   ├── server/                         # Application server setup
 │   │   └── index.js
 │   ├── services/                       # Services for handling business logic
 │   │   ├── Auth/                       # Authentication services
 │   │   │   └── index.js
+│   │   ├── Email/                      # Email services
+│   │   │   └── index.js
 │   │   ├── User/                       # User services
 │   │   │   └── index.js
 │   │   └── index.js
-│   ├── utility/                          # Utility functions for the app
+│   ├── utilities/                        # Utility functions for the app
 │   │   └── index.js
 │   └── index.js                        # Main entry point for the app
 │

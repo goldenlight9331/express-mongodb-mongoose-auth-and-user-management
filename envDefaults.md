@@ -1,19 +1,24 @@
-# MongoDB connection string for development (local) and production (remote).
-MONGO_URI="mongodb://localhost:27017/test"
+# Environment Configuration
 
-# Generate JWT Secret by running the following command in the terminal: node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-JWT_SECRET_KEY=your_secret_key_here
+## MongoDB
 
-# JWT token expiry time. Example values: '1h' for 1 hour, '7d' for 7 days. 
-JWT_SHORT_EXPIRATION_TIME=1h
-JWT_LONG_EXPIRATION_TIME=30d
+- **DATABASE_URI**: `mongodb://localhost:27017/test`
 
-# Port number
-PORT=3000
+## Application
 
-# Node environment
-NODE_ENV=development
+- **PORT**: `5000`
 
-# Email configuration
-EMAIL_USER=YOUR_EMAIL
-EMAIL_PASSWORD=YOUR_PASSWORD
+## JWT Configuration
+
+- **JWT_SECRET_KEY**: `# You can generate a random secret using openssl rand -hex 64`
+- **JWT_EXPIRY**: `# 10 seconds. You can set it to 1d for 1 day, 1h for 1 hour, 1m for 1 minute, etc.`
+- **JWT_ALGORITHM**: `HS256 # Algorithm used to sign the token. You can use HS256, HS384, HS512, RS256, RS384, RS512, ES256, ES384, ES512, PS256, PS384, PS512`
+- **JWT_VERIFICATION_LINK_EXPIRATION_TIME**: `# 1 hour. You can set it to 1d for 1 day, 1h for 1 hour, 1m for 1 minute, etc.`
+
+## Email Configuration
+
+- **USER_EMAIL**: `# Your email`
+- **USER_PASSWORD**: `# Your email password`
+- **EMAIL_HOST**: `smtp.gmail.com`
+- **EMAIL_SERVICE**: `gmail`
+- **EMAIL_PORT**: `587`

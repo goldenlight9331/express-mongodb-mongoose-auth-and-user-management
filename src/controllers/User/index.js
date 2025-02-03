@@ -1,7 +1,7 @@
-import utility from "#utility/index.js";
+import utilities from "#utilities/index.js";
 import { UserService } from "#services/index.js";
 
-const { asyncHandler } = utility;
+const { asyncHandler } = utilities;
 
 export const UserController = {
   getAll: asyncHandler(async (_, res) => {
@@ -18,13 +18,16 @@ export const UserController = {
   updateById: asyncHandler(async (req, res) => {
     const { userId } = req.params;
     const userData = req.body;
+    if (req.file) {
+      userData.profilePicture = req.file.path;
+    }
     const result = await UserService.updateById(userId, userData);
-    res.status(200).json(result);
+    res.status(201).json(result);
   }),
 
   deleteById: asyncHandler(async (req, res) => {
     const { userId } = req.params;
     const result = await UserService.deleteById(userId);
-    res.status(200).json(result);
+    res.status(201).json(result);
   }),
 };

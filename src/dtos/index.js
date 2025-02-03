@@ -1,10 +1,17 @@
 import { Joi } from "#packages/index.js";
 
-const nameValidation = Joi.string().trim().min(2).required().messages({
-  "string.base": "Name should be a type of text",
-  "string.empty": "Name should not be empty",
-  "string.min": "Name must be at least 2 characters long",
-  "any.required": "Name is required",
+const firstName = Joi.string().trim().min(2).required().messages({
+  "string.base": "First name should be a type of text",
+  "string.empty": "First name should not be empty",
+  "string.min": "First name must be at least 2 characters long",
+  "any.required": "First name is required",
+});
+
+const lastName = Joi.string().trim().min(2).required().messages({
+  "string.base": "Last name should be a type of text",
+  "string.empty": "Last name should not be empty",
+  "string.min": "Last name must be at least 2 characters long",
+  "any.required": "Last name is required",
 });
 
 const emailValidation = Joi.string()
@@ -39,10 +46,10 @@ const isRememberedValidation = Joi.boolean()
     "boolean.base": "isRemembered should be a boolean value",
   });
 
-// DTOs
 const dtos = {
   signUp: Joi.object({
-    name: nameValidation,
+    firstName: firstName,
+    lastName: lastName,
     email: emailValidation,
     password: passwordValidation,
     role: roleValidation,

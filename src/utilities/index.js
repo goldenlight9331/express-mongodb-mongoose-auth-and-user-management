@@ -1,13 +1,16 @@
+import env from "#env/index.js";
 import {
   jwt,
   createError,
   winston,
   bcrypt,
   nodemailer,
+  fs,
+  path,
+  fileURLToPath,
+  dirname,
 } from "#packages/index.js";
-import { blacklistedToken } from "#models/index.js";
 import { dataAccess } from "#dataAccess/index.js";
-import env from "#env/index.js";
 
 const {
   NODE_ENV,
@@ -17,8 +20,7 @@ const {
   USER_PASSWORD,
   EMAIL_SERVICE,
   JWT_SECRET_KEY,
-  JWT_LOGIN_LONG_EXPIRATION_TIME,
-  JWT_LOGIN_SHORT_EXPIRATION_TIME,
+  JWT_EXPIRY,
   JWT_VERIFICATION_LINK_EXPIRATION_TIME,
 } = env;
 const { fetch } = dataAccess;
@@ -93,30 +95,21 @@ export default {
       next(error);
     }
   },
+
   generateVerificationToken: (userId) => {
     return jwt.sign({ userId }, JWT_SECRET_KEY, {
       expiresIn: JWT_VERIFICATION_LINK_EXPIRATION_TIME,
     });
   },
 
-  generateAuthToken: (isRemembered, role, userId) => {
+  generateAuthToken: (role, userId) => {
     return jwt.sign({ role, userId }, JWT_SECRET_KEY, {
-      expiresIn: isRemembered
-        ? JWT_LOGIN_LONG_EXPIRATION_TIME
-        : JWT_LOGIN_SHORT_EXPIRATION_TIME,
+      expiresIn: JWT_EXPIRY,
     });
   },
 
   decodeToken: async (token) => {
-    const expiredToken = await blacklistedToken.findUnique({
-      where: { token },
-    });
-    if (expiredToken) {
-      throw createError(401, "Token has been invalidated");
-    }
-
     const decoded = jwt.verify(token, JWT_SECRET_KEY);
-
     return decoded;
   },
 
@@ -134,12 +127,30 @@ export default {
   },
 
   verificationNotification: () => {
-    const confirmationEmailHtml = fs.readFileSync(
+    let confirmationEmailHtml = fs.readFileSync(
       path.join(__dirname, "../public/VerificationNotification", "index.html"),
       "utf-8",
     );
 
+    confirmationEmailHtml = confirmationEmailHtml.replace(
+      "${forntendUrl}",
+      `${
+        NODE_ENV === "production"
+          ? "https://domainName.org"
+          : "http://localhost:5173"
+      }/login`,
+    );
+
     return confirmationEmailHtml;
+  },
+
+  deleteFile: (filePath) => {
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      console.log(`Deleted file: ${filePath}`);
+    } else {
+      console.log(`File not found: ${filePath}`);
+    }
   },
 
   transporter,

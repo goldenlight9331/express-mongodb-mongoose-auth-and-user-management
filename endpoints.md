@@ -1,35 +1,50 @@
 # API Endpoints Documentation 📚
 
 **Author:** Sharjeel Faiq  
-**Description:** Overview of API endpoints for **authentication**, and **user
-management**.
+**Description:** This document provides an overview of the API endpoints for Student Tutor Hub.
 
 ---
 
 ## Table of Contents 🗂️
 
-1. [Authentication Endpoints](#authentication-endpoints)
-2. [User Management Endpoints](#user-management-endpoints)
+1. [Auth Endpoints](#auth-endpoints)
+2. [User Endpoints](#user-endpoints)
+3. [Email Endpoints](#email-endpoints)
 
 ---
 
-## Authentication Endpoints 🔑
+## Auth Endpoints 🔑
 
-| **Method** | **Endpoint**           | **Description**                             |
-| ---------- | ---------------------- | ------------------------------------------- |
-| `POST`     | `/api/v1/auth/signup`  | Register a new user account.                |
-| `POST`     | `/api/v1/auth/signin`  | Authenticate user and return session token. |
-| `POST`     | `/api/v1/auth/signout` | Log out the authenticated user.             |
+| **Method** | **Endpoint**                   | **Description**                                    |
+| ---------- | ------------------------------ | -------------------------------------------------- |
+| `POST`     | `/api/v1/auth/signup`          | Registers a new user account.                      |
+| `POST`     | `/api/v1/auth/signin`          | Authenticates a user and provides a session token. |
+| `POST`     | `/api/v1/auth/signout`         | Logs out the authenticated user.                   |
+| `POST`     | `/api/v1/auth/forgot-password` | Sends a password reset link to the user's email.   |
+
+---
+
+## User Endpoints 👤
+
+| **Method** | **Endpoint**           | **Description**                                    |
+| ---------- | ---------------------- | -------------------------------------------------- |
+| `GET`      | `/api/v1/user/get-all` | Retrieves all users and their respective metadata. |
+| `GET`      | `/api/v1/user/:userId` | Retrieves a specific user by ID.                   |
+| `PUT`      | `/api/v1/user/:userId` | Updates a specific user by ID.                     |
+| `DELETE`   | `/api/v1/user/:userId` | Deletes a specific user by ID.                     |
 
 ---
 
-## User Management Endpoints 👤
+## Email Endpoints 📧
 
-| **Method** | **Endpoint**                         | **Description**                   |
-| ---------- | ------------------------------------ | --------------------------------- |
-| `GET`      | `/api/v1/users/get-all`              | Retrieve a list of all users.     |
-| `GET`      | `/api/v1/users/get-by-id/:userId`    | Retrieve details of a user by ID. |
-| `PUT`      | `/api/v1/users/update-by-id/:userId` | Update a user's details by ID.    |
-| `DELETE`   | `/api/v1/users/delete-by-id/:userId` | Delete a user by ID.              |
+| **Method** | **Endpoint**                                    | **Description**                  |
+| ---------- | ----------------------------------------------- | -------------------------------- |
+| `GET`      | `/api/v1/email/verify-email/:verificationToken` | Verifies a user's email address. |
 
----
+## Notes
+
+- **Authentication:** All endpoints require authentication unless otherwise
+  specified.
+- **Error Handling:** Ensure proper error handling mechanisms are in place for
+  each API call, returning informative messages such as 404 (Not Found) or 500
+  (Internal Server Error).

@@ -1,7 +1,9 @@
-import utility from "#utility/index.js";
-import { createError } from "#packages/index.js";
+import { createError, jwt } from "#packages/index.js";
+import utilities from "#utilities/index.js";
+import env from "#env/index.js";
 
-const { logger, asyncHandler } = utility;
+const { asyncHandler, logger } = utilities;
+const { JWT_SECRET } = env;
 
 export const validate = {
   dto: (schema) =>
@@ -32,7 +34,7 @@ export const validate = {
       throw createError(403, "Token is missing in the authorization header.");
     }
 
-    const decoded = await utility.decodeToken(token);
+    const decoded = await utilities.decodeToken(token);
 
     if (!decoded) {
       throw createError(401, "Invalid or expired token.");

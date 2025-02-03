@@ -1,15 +1,11 @@
+import utilities from "#utilities/index.js";
 import env from "#env/index.js";
-import utility from "#utility/index.js";
 
+const { logger } = utilities;
 const { PORT } = env;
-const { logger } = utility;
 
-const listenServer = (app) => {
+export const startServer = (app) => {
   app.listen(PORT || 5000, () => {
-    logger.info(
-      `The server is accessible at http://localhost:${PORT}`.white.bold,
-    );
+    logger.info(`Server running on http://localhost:${PORT}`.white.bold);
   });
 };
-
-export default listenServer;

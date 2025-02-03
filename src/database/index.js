@@ -1,20 +1,23 @@
 import { mongoose } from "#packages/index.js";
-import { env, logger } from "#utility/index.js";
+import utilities from "#utilities/index.js";
+import env from "#env/index.js";
 
 let isConnected = false;
 
+const { DATABASE_URI } = env;
+const { logger } = utilities;
+
 const connectDatabase = async () => {
-  const { MONGO_URI } = env;
   if (isConnected) {
-    logger.info("Using existing MongoDB connection".magenta.bold);
+    logger.warn("Using existing MongoDB connection".yellow.bold);
     return;
   }
 
   try {
-    const connection = await mongoose.connect(MONGO_URI);
+    const connection = await mongoose.connect(DATABASE_URI);
 
     isConnected = !!connection.connections[0].readyState;
-    logger.info("Connected to the MongoDB database".green.bold);
+    logger.info("Connected to MongoDB Database".green.bold);
 
     const db = mongoose.connection;
 
@@ -23,7 +26,7 @@ const connectDatabase = async () => {
     });
 
     db.on("disconnected", () => {
-      logger.warn("MongoDB disconnected".yellow.bold);
+      logger.error("MongoDB disconnected".red.bold);
       isConnected = false;
     });
 

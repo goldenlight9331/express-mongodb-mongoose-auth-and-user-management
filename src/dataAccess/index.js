@@ -1,37 +1,35 @@
 import { User, BlacklistedToken } from "#models/index.js";
+import { axios } from "#packages/index.js";
 
 export const dataAccess = {
   save: {
-    user: async (userData) => {
-      return await User.create(userData);
+    user: async (firstName, lastName, email, password, role) => {
+      return await User.create({ firstName, lastName, email, password, role });
     },
-
     blacklistedToken: async (token) => {
       return await BlacklistedToken.create({ token });
     },
   },
-
   fetch: {
     allUsers: async () => {
       return await User.find();
     },
-
     userByEmail: async (email) => {
-      return await User.findOne({ email });
+      return await User.findOne({
+        email,
+      });
     },
-
-    userById: async (id) => {
-      return await User.findById(id);
+    userById: async (userId) => {
+      return await User.findById(id).select("-password");
     },
 
     blacklistedToken: async (token) => {
       return await BlacklistedToken.findOne({ token });
     },
   },
-
   update: {
-    updateUserById: async (id, userData) => {
-      return await User.findByIdAndUpdate(id, userData, {
+    userById: async (userId, userData) => {
+      return await User.findByIdAndUpdate(userId, userData, {
         new: true,
         upsert: true,
       });
@@ -41,12 +39,13 @@ export const dataAccess = {
       return await User.findOneAndUpdate(
         { email },
         { password },
-        { new: true, upsert: true }
+        { new: true, upsert: true },
       );
     },
   },
-
   remove: {
-    userById: async (id) => await User.findByIdAndDelete(id),
+    userById: async (userId) => {
+      return await User.findByIdAndDelete(userId);
+    },
   },
 };

@@ -1,5 +1,5 @@
 import env from "#env/index.js";
-import utility from "#utility/index.js";
+import utilities from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 import {
   nodemailer,
@@ -10,8 +10,8 @@ import {
   createError,
 } from "#packages/index.js";
 
-const { USER_EMAIL, JWT_VERIFICATION_LINK_EXPIRATION_TIME } = env;
-const { transporter, logger } = utility;
+const { USER_EMAIL, JWT_VERIFICATION_LINK_EXPIRATION_TIME, NODE_ENV } = env;
+const { transporter, logger } = utilities;
 const { fetch } = dataAccess;
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +22,11 @@ export const sendVerificationEmail = async (toEmail, verificationToken) => {
     let verificationEmailHtml = fs.readFileSync(
       path.join(__dirname, "../../public/VerificationEmail", "index.html"),
       "utf-8",
+    );
+
+    verificationEmailHtml = verificationEmailHtml.replace(
+      "${backendUrl}",
+      `${NODE_ENV === "production" ? "https://api.domainName.org" : "http://localhost:5000"}`,
     );
 
     verificationEmailHtml = verificationEmailHtml.replace(

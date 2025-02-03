@@ -1,7 +1,7 @@
-import utility from "#utility/index.js";
+import utilities from "#utilities/index.js";
 import { EmailService } from "#services/index.js";
 
-const { asyncHandler } = utility;
+const { asyncHandler } = utilities;
 
 export const EmailController = {
   verifyEmail: asyncHandler(async (req, res) => {
