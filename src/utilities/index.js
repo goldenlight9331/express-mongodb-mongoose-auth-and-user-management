@@ -109,8 +109,7 @@ export default {
   },
 
   decodeToken: async (token) => {
-    const decoded = jwt.verify(token, JWT_SECRET_KEY);
-    return decoded;
+    return jwt.verify(token, JWT_SECRET_KEY);
   },
 
   checkEmailVerification: async (email) => {
@@ -133,7 +132,7 @@ export default {
     );
 
     confirmationEmailHtml = confirmationEmailHtml.replace(
-      "${forntendUrl}",
+      "${frontendUrl}",
       `${
         NODE_ENV === "production"
           ? "https://domainName.org"

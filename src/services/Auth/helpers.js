@@ -17,8 +17,8 @@ const { fetch } = dataAccess;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const sendVerificationEmail = async (toEmail, verificationToken) => {
-  try {
+export default {
+  sendVerificationEmail: async (toEmail, verificationToken) => {
     let verificationEmailHtml = fs.readFileSync(
       path.join(__dirname, "../../public/VerificationEmail", "index.html"),
       "utf-8",
@@ -44,11 +44,5 @@ export const sendVerificationEmail = async (toEmail, verificationToken) => {
     const info = await transporter.sendMail(mailOptions);
     logger.info(`Email sent: ${info.response}`);
     return true;
-  } catch (error) {
-    logger.error(`Error sending email: ${error.message}`);
-    throw createError(
-      500,
-      `Failed to send the welcome email. Details: ${error.message}`,
-    );
-  }
+  },
 };

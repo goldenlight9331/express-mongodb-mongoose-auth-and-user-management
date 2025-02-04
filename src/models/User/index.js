@@ -11,12 +11,14 @@ const UserSchema = new Schema({
     trim: true,
     minlength: [2, "First name must be at least 2 characters long"],
   },
+
   lastName: {
     type: String,
     required: [true, "Last name is required"],
     trim: true,
     minlength: [2, "Last name must be at least 2 characters long"],
   },
+
   email: {
     type: String,
     required: [true, "Email is required"],
@@ -25,11 +27,13 @@ const UserSchema = new Schema({
     trim: true,
     match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
   },
+
   password: {
     type: String,
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters long"],
   },
+
   role: {
     type: String,
     enum: {
@@ -38,14 +42,17 @@ const UserSchema = new Schema({
     },
     required: true,
   },
+
   isEmailVerified: {
     type: Boolean,
     default: false,
   },
+
   isApproved: {
     type: Boolean,
     default: false,
   },
+
   profilePicture: {
     type: String,
     default: null,

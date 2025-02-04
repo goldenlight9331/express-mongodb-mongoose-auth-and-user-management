@@ -6,19 +6,23 @@ export const dataAccess = {
     user: async (firstName, lastName, email, password, role) => {
       return await User.create({ firstName, lastName, email, password, role });
     },
+
     blacklistedToken: async (token) => {
       return await BlacklistedToken.create({ token });
     },
   },
+
   fetch: {
     allUsers: async () => {
       return await User.find();
     },
+
     userByEmail: async (email) => {
       return await User.findOne({
         email,
       });
     },
+
     userById: async (userId) => {
       return await User.findById(id).select("-password");
     },
@@ -27,9 +31,17 @@ export const dataAccess = {
       return await BlacklistedToken.findOne({ token });
     },
   },
+
   update: {
     userById: async (userId, userData) => {
       return await User.findByIdAndUpdate(userId, userData, {
+        new: true,
+        upsert: true,
+      });
+    },
+
+    userByEmail: async (email, userData) => {
+      return await User.findOneAndUpdate({ email }, userData, {
         new: true,
         upsert: true,
       });
@@ -43,6 +55,7 @@ export const dataAccess = {
       );
     },
   },
+
   remove: {
     userById: async (userId) => {
       return await User.findByIdAndDelete(userId);

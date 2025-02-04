@@ -14,6 +14,7 @@ export const UserService = {
 
     return users;
   },
+
   getById: async (userId) => {
     const user = await fetch.userById(userId);
     if (!user) {
@@ -22,6 +23,7 @@ export const UserService = {
 
     return user;
   },
+
   updateById: async (userId, userData) => {
     // Fetch the existing user data
     const existingUser = await fetch.userById(userId);
@@ -38,6 +40,7 @@ export const UserService = {
     const updatedUser = await update.userById(userId, userData);
     return updatedUser;
   },
+
   deleteById: async (userId) => {
     const user = await remove.userById(userId);
     if (!user) {

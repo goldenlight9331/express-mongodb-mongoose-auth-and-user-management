@@ -2,7 +2,7 @@ import env from "#env/index.js";
 import utilities from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 import { createError } from "#packages/index.js";
-import { sendVerificationEmail } from "./helpers.js";
+import helpers from "./helpers.js";
 
 const {
   transporter,
@@ -13,6 +13,7 @@ const {
 } = utilities;
 const { USER_EMAIL } = env;
 const { save, fetch } = dataAccess;
+const { sendVerificationEmail } = helpers;
 
 export const AuthService = {
   signUp: async ({ firstName, lastName, email, password, role }) => {
@@ -26,7 +27,7 @@ export const AuthService = {
       throw createError(500, "Failed to create a new user.");
     }
 
-    const verificationToken = generateVerificationToken(newUser.email);
+    const verificationToken = generateVerificationToken(newUser._id);
     if (!verificationToken) {
       throw createError(500, "An error occurred while generating the token.");
     }
@@ -60,7 +61,7 @@ export const AuthService = {
       throw createError(401, "Invalid email or password.");
     }
 
-    const token = generateAuthToken(existingUser.role, existingUser.email);
+    const token = generateAuthToken(existingUser.role, existingUser._id);
     if (!token) {
       throw createError(500, "Token generation failed");
     }
@@ -100,7 +101,7 @@ export const AuthService = {
       throw createError(400, "A user with this email does not exist.");
     }
 
-    const verificationToken = generateVerificationToken(existingUser.email);
+    const verificationToken = generateVerificationToken(existingUser._id);
     if (!verificationToken) {
       throw createError(500, "An error occurred while generating the token.");
     }

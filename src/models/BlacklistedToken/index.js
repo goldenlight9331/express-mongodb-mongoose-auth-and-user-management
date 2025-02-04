@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { mongoose } from "#packages/index.js";
 
 const { Schema } = mongoose;
 
@@ -8,6 +8,7 @@ const BlacklistedTokenSchema = new Schema({
     required: true,
     unique: true,
   },
+
   expiresAt: {
     type: Date,
     default: Date.now,
