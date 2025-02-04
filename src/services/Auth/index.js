@@ -26,7 +26,7 @@ export const AuthService = {
       throw createError(500, "Failed to create a new user.");
     }
 
-    const verificationToken = generateVerificationToken(newUser.id);
+    const verificationToken = generateVerificationToken(newUser.email);
     if (!verificationToken) {
       throw createError(500, "An error occurred while generating the token.");
     }
@@ -60,7 +60,7 @@ export const AuthService = {
       throw createError(401, "Invalid email or password.");
     }
 
-    const token = generateAuthToken(existingUser.role, existingUser.id);
+    const token = generateAuthToken(existingUser.role, existingUser.email);
     if (!token) {
       throw createError(500, "Token generation failed");
     }
@@ -100,7 +100,7 @@ export const AuthService = {
       throw createError(400, "A user with this email does not exist.");
     }
 
-    const verificationToken = generateVerificationToken(existingUser.id);
+    const verificationToken = generateVerificationToken(existingUser.email);
     if (!verificationToken) {
       throw createError(500, "An error occurred while generating the token.");
     }
