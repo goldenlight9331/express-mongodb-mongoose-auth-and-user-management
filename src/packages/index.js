@@ -1,5 +1,4 @@
 import { fileURLToPath } from "url";
-import { createServer } from "node:http";
 import path, { dirname } from "path";
 
 export { default as axios } from "axios";
@@ -19,4 +18,4 @@ export { default as multer } from "multer";
 export { default as nodemailer } from "nodemailer";
 export { default as winston } from "winston";
 
-export { createServer, path, dirname, fileURLToPath };
+export { path, dirname, fileURLToPath };
