@@ -33,12 +33,10 @@ const passwordValidation = Joi.string().trim().min(6).required().messages({
   "any.required": "Password is required",
 });
 
-const roleValidation = Joi.string()
-  .valid("admin", "user")
-  .messages({
-    "string.base": "Role should be a type of text",
-    "any.only": "Role must be either admin or user",
-  });
+const roleValidation = Joi.string().required().valid("admin", "user").messages({
+  "string.base": "Role should be a type of text",
+  "any.only": "Role must be either admin or user",
+});
 
 const isApprovedValidation = Joi.boolean()
   .truthy("yes", "true", 1)
@@ -71,7 +69,7 @@ const dtos = {
     password: passwordValidation,
     isRemembered: isRememberedValidation,
   }),
-  
+
   forgotPassword: Joi.object({
     email: emailValidation,
     password: passwordValidation,
