@@ -30,10 +30,10 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
   const mimetypeValid = ALLOWED_FILE_TYPES.test(file.mimetype);
   const extValid = ALLOWED_FILE_TYPES.test(
-    path.extname(file.originalname).toLowerCase(),
+    path.extname(file.originalname).toLowerCase()
   );
-  return mimetypeValid && extValid
-    ? cb(null, true)
+  return mimetypeValid && extValid ?
+      cb(null, true)
     : cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
 };
 
@@ -63,16 +63,14 @@ const middleware = {
           stack: NODE_ENV === "development" ? err.stack : {},
         },
         null,
-        2,
-      ),
+        2
+      )
     );
     res.status(status).json({
-      error: {
-        success: false,
-        status,
-        message,
-        stack: NODE_ENV === "development" ? err.stack : {},
-      },
+      success: false,
+      status,
+      message,
+      stack: NODE_ENV === "development" ? err.stack : {},
     });
   },
 
@@ -86,7 +84,7 @@ const middleware = {
         const errorMessages = error.details.map(({ message }) => message);
         throw createError(
           400,
-          `Validation failed: ${errorMessages.join(", ")}`,
+          `Validation failed: ${errorMessages.join(", ")}`
         );
       }
       req.body = value;
@@ -118,7 +116,7 @@ const middleware = {
       if (req.user.role !== authorizedRole) {
         throw createError(
           403,
-          `Access denied: ${authorizedRole} role required.`,
+          `Access denied: ${authorizedRole} role required.`
         );
       }
       next();
