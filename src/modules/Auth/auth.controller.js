@@ -1,18 +1,18 @@
 import utilities from "#utilities/index.js";
-import { AuthService } from "#services/index.js";
+import authService from "./auth.service.js";
 
 const { asyncHandler } = utilities;
 
-export const AuthController = {
+const authController = {
   signUp: asyncHandler(async (req, res) => {
     const userData = req.body;
-    const result = await AuthService.signUp(userData);
+    const result = await authService.signUp(userData);
     res.status(201).json(result);
   }),
 
   signIn: asyncHandler(async (req, res) => {
     const userData = req.body;
-    const result = await AuthService.signIn(userData);
+    const result = await authService.signIn(userData);
     const token = result.token;
     res
       .status(200)
@@ -22,14 +22,16 @@ export const AuthController = {
 
   signOut: asyncHandler(async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
-    const result = await AuthService.signOut(token);
+    const result = await authService.signOut(token);
     res.status(200).json(result);
   }),
 
   forgotPassword: asyncHandler(async (req, res) => {
     const { email } = req.params;
     const { password } = req.body;
-    const result = await AuthService.forgotPassword(email, password);
+    const result = await authService.forgotPassword(email, password);
     res.status(200).json(result);
   }),
 };
+
+export default authController;

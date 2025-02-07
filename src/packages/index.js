@@ -1,6 +1,3 @@
-import { fileURLToPath } from "url";
-import path, { dirname } from "path";
-
 export { default as axios } from "axios";
 export { default as bcrypt } from "bcryptjs";
 export { default as colors } from "colors";
@@ -17,5 +14,8 @@ export { default as morgan } from "morgan";
 export { default as multer } from "multer";
 export { default as nodemailer } from "nodemailer";
 export { default as winston } from "winston";
+import { fileURLToPath } from "url";
+import { faker } from "@faker-js/faker";
+import path, { dirname } from "path";
 
-export { path, dirname, fileURLToPath };
+export { path, dirname, fileURLToPath, faker };

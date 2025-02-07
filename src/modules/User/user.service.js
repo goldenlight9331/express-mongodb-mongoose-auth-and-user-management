@@ -1,11 +1,12 @@
-import utilities from "#utilities/index.js";
 import { createError } from "#packages/index.js";
+
+import utilities from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
 const { fetch, update, remove } = dataAccess;
 const { deleteFile } = utilities;
 
-export const UserService = {
+const userService = {
   getAll: async () => {
     const users = await fetch.allUsers();
     if (!users.length) {
@@ -14,19 +15,17 @@ export const UserService = {
 
     return users;
   },
-
-  getById: async (userId) => {
-    const user = await fetch.userById(userId);
+  getById: async (id) => {
+    const user = await fetch.userById(id);
     if (!user) {
       throw createError(404, "User not found");
     }
 
     return user;
   },
-
-  updateById: async (userId, userData) => {
+  updateById: async (id, userData) => {
     // Fetch the existing user data
-    const existingUser = await fetch.userById(userId);
+    const existingUser = await fetch.userById(id);
     if (!existingUser) {
       throw createError(404, "User not found");
     }
@@ -37,12 +36,11 @@ export const UserService = {
     }
 
     // Update the user data
-    const updatedUser = await update.userById(userId, userData);
+    const updatedUser = await update.userById(id, userData);
     return updatedUser;
   },
-
-  deleteById: async (userId) => {
-    const user = await remove.userById(userId);
+  deleteById: async (id) => {
+    const user = await remove.userById(id);
     if (!user) {
       throw createError(404, "User not found");
     }
@@ -50,3 +48,5 @@ export const UserService = {
     return "User deleted successfully";
   },
 };
+
+export default userService;

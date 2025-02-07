@@ -20,3 +20,8 @@
 - **EMAIL_HOST**: `smtp.gmail.com`
 - **EMAIL_SERVICE**: `gmail`
 - **EMAIL_PORT**: `587`
+
+
+## Environment Configuration
+
+- **NODE_ENV**: `development`

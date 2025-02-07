@@ -1,10 +1,16 @@
 import { User, BlacklistedToken } from "#models/index.js";
-import { axios } from "#packages/index.js";
 
 export const dataAccess = {
   save: {
-    user: async (firstName, lastName, email, password, role) => {
-      return await User.create({ firstName, lastName, email, password, role });
+    user: async (firstName, lastName, email, password, role, isApproved) => {
+      return await User.create({
+        firstName,
+        lastName,
+        email,
+        password,
+        role,
+        isApproved,
+      });
     },
 
     blacklistedToken: async (token) => {
@@ -14,7 +20,7 @@ export const dataAccess = {
 
   fetch: {
     allUsers: async () => {
-      return await User.find();
+      return await User.find().select("-password");
     },
 
     userByEmail: async (email) => {
@@ -23,7 +29,7 @@ export const dataAccess = {
       });
     },
 
-    userById: async (userId) => {
+    userById: async (id) => {
       return await User.findById(id).select("-password");
     },
 
@@ -33,18 +39,18 @@ export const dataAccess = {
   },
 
   update: {
-    userById: async (userId, userData) => {
-      return await User.findByIdAndUpdate(userId, userData, {
+    userById: async (id, userData) => {
+      return await User.findByIdAndUpdate(id, userData, {
         new: true,
         upsert: true,
-      });
+      }).select("-password");
     },
 
     userByEmail: async (email, userData) => {
       return await User.findOneAndUpdate({ email }, userData, {
         new: true,
         upsert: true,
-      });
+      }).select("-password");
     },
 
     forgottenPassword: async (email, password) => {
@@ -57,8 +63,8 @@ export const dataAccess = {
   },
 
   remove: {
-    userById: async (userId) => {
-      return await User.findByIdAndDelete(userId);
+    userById: async (id) => {
+      return await User.findByIdAndDelete(id);
     },
   },
 };

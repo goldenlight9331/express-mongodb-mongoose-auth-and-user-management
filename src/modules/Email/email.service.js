@@ -1,20 +1,21 @@
+import { createError } from "#packages/index.js";
+
 import utilities from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
-import { createError } from "#packages/index.js";
 
 const { decodeToken, verificationNotification } = utilities;
 const { update } = dataAccess;
 
-export const EmailService = {
+const emailService = {
   verifyEmail: async (verificationToken) => {
     const decoded = await decodeToken(verificationToken);
     if (!decoded) {
       throw createError(400, "Invalid verification token");
     }
 
-    const userId = decoded.userId;
+    const id = decoded.id;
 
-    const isUserUpdated = await update.userById(userId, {
+    const isUserUpdated = await update.userById(id, {
       isEmailVerified: true,
     });
     if (!isUserUpdated) {
@@ -26,3 +27,5 @@ export const EmailService = {
     return result;
   },
 };
+
+export default emailService;

@@ -1,18 +1,10 @@
+import { fs, path, fileURLToPath, dirname } from "#packages/index.js";
+
 import env from "#env/index.js";
 import utilities from "#utilities/index.js";
-import { dataAccess } from "#dataAccess/index.js";
-import {
-  nodemailer,
-  fs,
-  path,
-  fileURLToPath,
-  dirname,
-  createError,
-} from "#packages/index.js";
 
-const { USER_EMAIL, JWT_VERIFICATION_LINK_EXPIRATION_TIME, NODE_ENV } = env;
+const { USER_EMAIL, NODE_ENV } = env;
 const { transporter, logger } = utilities;
-const { fetch } = dataAccess;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,7 +12,7 @@ const __dirname = dirname(__filename);
 export default {
   sendVerificationEmail: async (toEmail, verificationToken) => {
     let verificationEmailHtml = fs.readFileSync(
-      path.join(__dirname, "../../public/VerificationEmail", "index.html"),
+      path.join(__dirname, "../../views/VerificationEmail", "index.html"),
       "utf-8",
     );
 

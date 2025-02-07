@@ -1,28 +1,40 @@
-import env from "#env/index.js";
+import { createError } from "#packages/index.js";
+
 import utilities from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
-import { createError } from "#packages/index.js";
 import helpers from "./helpers.js";
 
 const {
-  transporter,
-  generateAuthToken,
-  generateVerificationToken,
-  checkEmailVerification,
   decodeToken,
+  generateAuthToken,
+  checkEmailVerification,
+  generateVerificationToken,
 } = utilities;
-const { USER_EMAIL } = env;
 const { save, fetch } = dataAccess;
 const { sendVerificationEmail } = helpers;
 
-export const AuthService = {
-  signUp: async ({ firstName, lastName, email, password, role }) => {
+const authService = {
+  signUp: async ({
+    firstName,
+    lastName,
+    email,
+    password,
+    role,
+    isApproved,
+  }) => {
     const existingUser = await fetch.userByEmail(email);
     if (existingUser) {
       throw createError(400, "A user with this email already exists.");
     }
 
-    const newUser = await save.user(firstName, lastName, email, password, role);
+    const newUser = await save.user(
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+      isApproved,
+    );
     if (!newUser) {
       throw createError(500, "Failed to create a new user.");
     }
@@ -67,7 +79,8 @@ export const AuthService = {
     }
 
     const result = {
-      userId: existingUser._id,
+      id: existingUser._id,
+      role: existingUser.role,
       token,
     };
 
@@ -80,13 +93,9 @@ export const AuthService = {
       throw createError(401, "The provided token is invalid or expired.");
     }
 
-    const userId = decoded.userId;
+    const id = decoded.id;
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1-hour expiration
-    const blacklistedToken = await save.blacklistedToken(
-      token,
-      expiresAt,
-      userId,
-    );
+    const blacklistedToken = await save.blacklistedToken(token, expiresAt, id);
 
     if (!blacklistedToken) {
       throw createError(500, "An error occurred while blacklisting the token.");
@@ -124,3 +133,5 @@ export const AuthService = {
     return "Password updated successfully";
   },
 };
+
+export default authService;

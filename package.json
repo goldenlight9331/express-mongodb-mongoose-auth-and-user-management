@@ -7,10 +7,14 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "format": "prettier --write \"src/**/*.{js,html}\""
+    "format": "prettier --write \"src/**/*.{js,html}\"",
+    "lint": "eslint \"src/**/*.js\"",
+    "seedDatabase": "node src/scripts/index.js"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.4.0",
     "colors": "^1.4.0",
+    "eslint": "^9.19.0",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2"
@@ -30,19 +34,16 @@
     "winston": "^3.17.0"
   },
   "imports": {
-    "#controllers/*": "./src/controllers/*",
     "#dataAccess/*": "./src/dataAccess/*",
     "#database/*": "./src/database/*",
     "#dtos/*": "./src/dtos/*",
     "#env/*": "./src/env/*",
-    "#helpers/*": "./src/helpers/*",
-    "#middlewares/*": "./src/middlewares/*",
+    "#middleware/*": "./src/middleware/*",
     "#models/*": "./src/models/*",
     "#packages/*": "./src/packages/*",
+    "#views/*": "./src/views/*",
     "#routes/*": "./src/routes/*",
     "#server/*": "./src/server/*",
-    "#services/*": "./src/services/*",
-    "#utilities/*": "./src/utilities/*",
-    "#webSockets/*": "./src/webSockets/*"
+    "#utilities/*": "./src/utilities/*"
   }
 }

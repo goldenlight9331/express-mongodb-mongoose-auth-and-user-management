@@ -1,7 +1,7 @@
 # API Endpoints Documentation 📚
 
 **Author:** Sharjeel Faiq  
-**Description:** This document provides an overview of the API endpoints for Student Tutor Hub.
+**Description:** This document provides an overview of the API endpoints.
 
 ---
 
@@ -39,7 +39,7 @@
 
 | **Method** | **Endpoint**                                    | **Description**                  |
 | ---------- | ----------------------------------------------- | -------------------------------- |
-| `GET`      | `/api/v1/email/verify-email/:verificationToken` | Verifies a user's email address. |
+| `GET`      | `/api/v1/email/verify/:verificationToken` | Verifies a user's email address. |
 
 ## Notes
 

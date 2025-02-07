@@ -1,16 +1,16 @@
-import env from "#env/index.js";
 import {
   jwt,
   createError,
   winston,
-  bcrypt,
   nodemailer,
   fs,
   path,
   fileURLToPath,
   dirname,
 } from "#packages/index.js";
+
 import { dataAccess } from "#dataAccess/index.js";
+import env from "#env/index.js";
 
 const {
   NODE_ENV,
@@ -96,14 +96,14 @@ export default {
     }
   },
 
-  generateVerificationToken: (userId) => {
-    return jwt.sign({ userId }, JWT_SECRET_KEY, {
+  generateVerificationToken: (id) => {
+    return jwt.sign({ id }, JWT_SECRET_KEY, {
       expiresIn: JWT_VERIFICATION_LINK_EXPIRATION_TIME,
     });
   },
 
-  generateAuthToken: (role, userId) => {
-    return jwt.sign({ role, userId }, JWT_SECRET_KEY, {
+  generateAuthToken: (role, id) => {
+    return jwt.sign({ role, id }, JWT_SECRET_KEY, {
       expiresIn: JWT_EXPIRY,
     });
   },
@@ -127,7 +127,7 @@ export default {
 
   verificationNotification: () => {
     let confirmationEmailHtml = fs.readFileSync(
-      path.join(__dirname, "../public/VerificationNotification", "index.html"),
+      path.join(__dirname, "../views/VerificationNotification", "index.html"),
       "utf-8",
     );
 
@@ -135,7 +135,7 @@ export default {
       "${frontendUrl}",
       `${
         NODE_ENV === "production"
-          ? "https://domainName.org"
+          ? "https://studenttutorhub.org"
           : "http://localhost:5173"
       }/login`,
     );
@@ -146,9 +146,6 @@ export default {
   deleteFile: (filePath) => {
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
-      console.log(`Deleted file: ${filePath}`);
-    } else {
-      console.log(`File not found: ${filePath}`);
     }
   },
 
