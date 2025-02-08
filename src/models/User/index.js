@@ -42,6 +42,7 @@ const UserSchema = new Schema(
         values: ["admin", "user"],
         message: "Role must be either admin or user",
       },
+      default: "user",
       required: true,
     },
 
