@@ -133,7 +133,7 @@ export default {
 
     verificationEmailHtml = verificationEmailHtml.replace(
       "${backendUrl}",
-      `${NODE_ENV === "production" ? "https://api.studenttutorhub.org" : "http://localhost:5000"}`,
+      `${NODE_ENV === "production" ? "https://api.yourdomain.org" : "http://localhost:5000"}`,
     );
 
     verificationEmailHtml = verificationEmailHtml.replace(
@@ -144,7 +144,7 @@ export default {
     const mailOptions = {
       from: USER_EMAIL,
       to: toEmail,
-      subject: "Welcome to Student Tutor Hub 🙌",
+      subject: "Welcome to Our Platform 🙌",
       html: verificationEmailHtml,
     };
 
@@ -161,7 +161,7 @@ export default {
 
     confirmationEmailHtml = confirmationEmailHtml.replace(
       "${frontendUrl}",
-      `${NODE_ENV === "production" ? "https://studenttutorhub.org" : "http://localhost:5173"}/login`,
+      `${NODE_ENV === "production" ? "https://yourdomain.com" : "http://localhost:5173"}/login`,
     );
 
     return confirmationEmailHtml;
