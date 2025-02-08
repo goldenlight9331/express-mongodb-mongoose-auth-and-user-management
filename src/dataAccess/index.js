@@ -18,7 +18,7 @@ export const dataAccess = {
     },
   },
 
-  fetch: {
+  read: {
     allUsers: async () => {
       return await User.find().select("-password -isRemembered");
     },

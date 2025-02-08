@@ -3,12 +3,12 @@ import { createError } from "#packages/index.js";
 import utilities from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
-const { fetch, update, remove } = dataAccess;
+const { read, update, remove } = dataAccess;
 const { deleteFile } = utilities;
 
 const userService = {
   getAll: async () => {
-    const users = await fetch.allUsers();
+    const users = await read.allUsers();
     if (!users.length) {
       throw createError(404, "Users not found");
     }
@@ -16,7 +16,7 @@ const userService = {
     return users;
   },
   getById: async (id) => {
-    const user = await fetch.userById(id);
+    const user = await read.userById(id);
     if (!user) {
       throw createError(404, "User not found");
     }
@@ -24,8 +24,8 @@ const userService = {
     return user;
   },
   updateById: async (id, userData) => {
-    // Fetch the existing user data
-    const existingUser = await fetch.userById(id);
+    // read the existing user data
+    const existingUser = await read.userById(id);
     if (!existingUser) {
       throw createError(404, "User not found");
     }

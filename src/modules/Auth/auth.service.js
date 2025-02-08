@@ -6,11 +6,10 @@ import { dataAccess } from "#dataAccess/index.js";
 const {
   decodeToken,
   generateAuthToken,
-  checkEmailVerification,
   generateVerificationToken,
   sendVerificationEmail,
 } = utilities;
-const { save, fetch } = dataAccess;
+const { save, read } = dataAccess;
 
 const authService = {
   signUp: async ({
@@ -21,7 +20,7 @@ const authService = {
     role,
     isApproved,
   }) => {
-    const existingUser = await fetch.userByEmail(email);
+    const existingUser = await read.userByEmail(email);
     if (existingUser) {
       throw createError(400, "A user with this email already exists.");
     }
@@ -52,14 +51,9 @@ const authService = {
   },
 
   signIn: async ({ email, password, isRemembered }) => {
-    const existingUser = await fetch.userByEmail(email);
+    const existingUser = await read.userByEmail(email);
     if (!existingUser) {
       throw createError(401, "Invalid email or password.");
-    }
-
-    const isEmailVerified = await checkEmailVerification(email);
-    if (!isEmailVerified) {
-      throw createError(401, "Please verify your email before signing in.");
     }
 
     const isApproved = existingUser.isApproved;
@@ -72,7 +66,11 @@ const authService = {
       throw createError(401, "Invalid email or password.");
     }
 
-    const token = generateAuthToken(existingUser.role, existingUser._id, isRemembered);
+    const token = generateAuthToken(
+      existingUser.role,
+      existingUser._id,
+      isRemembered,
+    );
     if (!token) {
       throw createError(500, "Token generation failed");
     }
@@ -104,7 +102,7 @@ const authService = {
   },
 
   forgotPassword: async (email, password) => {
-    const existingUser = await fetch.userByEmail(email);
+    const existingUser = await read.userByEmail(email);
     if (!existingUser) {
       throw createError(400, "A user with this email does not exist.");
     }

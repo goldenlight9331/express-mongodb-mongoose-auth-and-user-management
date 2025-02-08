@@ -4,4 +4,6 @@ import emailController from "./email.controller.js";
 
 export const emailRoutes = express.Router();
 
-emailRoutes.get("/verify/:verificationToken", emailController.verifyEmail);
+emailRoutes
+  .get("/verify/:verificationToken", emailController.verifyEmail)
+  .post("/send-verification", emailController.sendVerificationEmail);

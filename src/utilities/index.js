@@ -1,6 +1,5 @@
 import {
   jwt,
-  createError,
   winston,
   nodemailer,
   fs,
@@ -10,7 +9,6 @@ import {
 } from "#packages/index.js";
 
 import env from "#env/index.js";
-import { dataAccess } from "#dataAccess/index.js";
 
 const {
   NODE_ENV,
@@ -24,7 +22,6 @@ const {
   JWT_LONG_EXPIRY,
   JWT_VERIFICATION_LINK_EXPIRY,
 } = env;
-const { fetch } = dataAccess;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,7 +39,7 @@ const createLogger = () => {
     winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
     winston.format.printf(({ level, message, timestamp }) => {
       return `${timestamp} [${level}]: ${message}`;
-    })
+    }),
   );
 
   return winston.createLogger({
@@ -114,33 +111,20 @@ export default {
     return jwt.verify(token, JWT_SECRET_KEY);
   },
 
-  checkEmailVerification: async (email) => {
-    const user = await fetch.userByEmail(email);
-    if (!user) {
-      throw createError(404, "User not found");
-    }
-
-    if (!user.isEmailVerified) {
-      throw createError(401, "Please verify your email before signing in");
-    }
-
-    return true;
-  },
-
   sendVerificationEmail: async (toEmail, verificationToken) => {
     let verificationEmailHtml = fs.readFileSync(
       path.join(__dirname, "../views/VerificationEmail", "index.html"),
-      "utf-8"
+      "utf-8",
     );
 
     verificationEmailHtml = verificationEmailHtml.replace(
       "${backendUrl}",
-      `${NODE_ENV === "production" ? "https://api.studenttutorhub.org" : "http://localhost:5000"}`
+      `${NODE_ENV === "production" ? "https://api.studenttutorhub.org" : "http://localhost:5000"}`,
     );
 
     verificationEmailHtml = verificationEmailHtml.replace(
       "${verificationToken}",
-      verificationToken
+      verificationToken,
     );
 
     const mailOptions = {
@@ -158,12 +142,12 @@ export default {
   sendVerificationNotification: () => {
     let confirmationEmailHtml = fs.readFileSync(
       path.join(__dirname, "../views/VerificationNotification", "index.html"),
-      "utf-8"
+      "utf-8",
     );
 
     confirmationEmailHtml = confirmationEmailHtml.replace(
       "${frontendUrl}",
-      `${NODE_ENV === "production" ? "https://studenttutorhub.org" : "http://localhost:5173"}/login`
+      `${NODE_ENV === "production" ? "https://studenttutorhub.org" : "http://localhost:5173"}/login`,
     );
 
     return confirmationEmailHtml;

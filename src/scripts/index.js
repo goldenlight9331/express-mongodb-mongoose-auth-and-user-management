@@ -15,7 +15,6 @@ async function main() {
 
     // Define the number of users to create (must be an even number)
     const totalUsers = 20;
-    const halfCount = totalUsers / 2;
 
     // Default password for all users
     let defaultPassword = "12345678";
@@ -24,8 +23,8 @@ async function main() {
 
     const users = [];
 
-    // Create tutor users
-    for (let i = 0; i < halfCount; i++) {
+    // Create user accounts
+    for (let i = 0; i < totalUsers; i++) {
       const firstName = faker.name.firstName();
       const lastName = faker.name.lastName();
       const email = faker.internet.email(firstName, lastName);
@@ -35,24 +34,7 @@ async function main() {
         lastName,
         email,
         password: defaultPassword,
-        role: "tutor",
-        isApproved: false,
-        isEmailVerified: true,
-      });
-    }
-
-    // Create student users
-    for (let i = 0; i < halfCount; i++) {
-      const firstName = faker.name.firstName();
-      const lastName = faker.name.lastName();
-      const email = faker.internet.email(firstName, lastName);
-
-      users.push({
-        firstName,
-        lastName,
-        email,
-        password: defaultPassword,
-        role: "student",
+        role: "user",
         isApproved: false,
         isEmailVerified: true,
       });
