@@ -24,7 +24,7 @@ async function main() {
 
     const users = [];
 
-    // Create users
+    // Create tutor users
     for (let i = 0; i < halfCount; i++) {
       const firstName = faker.name.firstName();
       const lastName = faker.name.lastName();
@@ -35,7 +35,24 @@ async function main() {
         lastName,
         email,
         password: defaultPassword,
-        role: "user",
+        role: "tutor",
+        isApproved: false,
+        isEmailVerified: true,
+      });
+    }
+
+    // Create student users
+    for (let i = 0; i < halfCount; i++) {
+      const firstName = faker.name.firstName();
+      const lastName = faker.name.lastName();
+      const email = faker.internet.email(firstName, lastName);
+
+      users.push({
+        firstName,
+        lastName,
+        email,
+        password: defaultPassword,
+        role: "student",
         isApproved: false,
         isEmailVerified: true,
       });

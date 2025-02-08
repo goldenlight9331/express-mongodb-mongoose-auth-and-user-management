@@ -45,6 +45,11 @@ const UserSchema = new Schema(
       required: true,
     },
 
+    profilePicture: {
+      type: String,
+      default: null,
+    },
+    
     isEmailVerified: {
       type: Boolean,
       default: false,
@@ -55,10 +60,10 @@ const UserSchema = new Schema(
       default: false,
     },
 
-    profilePicture: {
-      type: String,
-      default: null,
-    },
+    isRemembered: {
+      type: Boolean,
+      default: false,
+    }
   },
   {
     timestamps: true, // Adds createdAt and updatedAt timestamps to the document

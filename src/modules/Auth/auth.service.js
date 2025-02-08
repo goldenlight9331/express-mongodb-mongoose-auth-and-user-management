@@ -2,16 +2,15 @@ import { createError } from "#packages/index.js";
 
 import utilities from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
-import helpers from "./helpers.js";
 
 const {
   decodeToken,
   generateAuthToken,
   checkEmailVerification,
   generateVerificationToken,
+  sendVerificationEmail,
 } = utilities;
 const { save, fetch } = dataAccess;
-const { sendVerificationEmail } = helpers;
 
 const authService = {
   signUp: async ({
@@ -52,7 +51,7 @@ const authService = {
     return "User registered successfully";
   },
 
-  signIn: async ({ email, password }) => {
+  signIn: async ({ email, password, isRemembered }) => {
     const existingUser = await fetch.userByEmail(email);
     if (!existingUser) {
       throw createError(401, "Invalid email or password.");
@@ -73,7 +72,7 @@ const authService = {
       throw createError(401, "Invalid email or password.");
     }
 
-    const token = generateAuthToken(existingUser.role, existingUser._id);
+    const token = generateAuthToken(existingUser.role, existingUser._id, isRemembered);
     if (!token) {
       throw createError(500, "Token generation failed");
     }

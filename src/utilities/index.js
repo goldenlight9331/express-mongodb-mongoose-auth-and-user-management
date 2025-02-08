@@ -20,8 +20,9 @@ const {
   USER_PASSWORD,
   EMAIL_SERVICE,
   JWT_SECRET_KEY,
-  JWT_EXPIRY,
-  JWT_VERIFICATION_LINK_EXPIRATION_TIME,
+  JWT_SHORT_EXPIRY,
+  JWT_LONG_EXPIRY,
+  JWT_VERIFICATION_LINK_EXPIRY,
 } = env;
 const { fetch } = dataAccess;
 
@@ -41,7 +42,7 @@ const createLogger = () => {
     winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
     winston.format.printf(({ level, message, timestamp }) => {
       return `${timestamp} [${level}]: ${message}`;
-    }),
+    })
   );
 
   return winston.createLogger({
@@ -98,13 +99,14 @@ export default {
 
   generateVerificationToken: (id) => {
     return jwt.sign({ id }, JWT_SECRET_KEY, {
-      expiresIn: JWT_VERIFICATION_LINK_EXPIRATION_TIME,
+      expiresIn: JWT_VERIFICATION_LINK_EXPIRY,
     });
   },
 
-  generateAuthToken: (role, id) => {
+  generateAuthToken: (role, id, isRemembered) => {
+    const expiry = isRemembered ? JWT_LONG_EXPIRY : JWT_SHORT_EXPIRY;
     return jwt.sign({ role, id }, JWT_SECRET_KEY, {
-      expiresIn: JWT_EXPIRY,
+      expiresIn: expiry,
     });
   },
 
@@ -128,23 +130,23 @@ export default {
   sendVerificationEmail: async (toEmail, verificationToken) => {
     let verificationEmailHtml = fs.readFileSync(
       path.join(__dirname, "../views/VerificationEmail", "index.html"),
-      "utf-8",
+      "utf-8"
     );
 
     verificationEmailHtml = verificationEmailHtml.replace(
       "${backendUrl}",
-      `${NODE_ENV === "production" ? "https://api.yourdomain.org" : "http://localhost:5000"}`,
+      `${NODE_ENV === "production" ? "https://api.studenttutorhub.org" : "http://localhost:5000"}`
     );
 
     verificationEmailHtml = verificationEmailHtml.replace(
       "${verificationToken}",
-      verificationToken,
+      verificationToken
     );
 
     const mailOptions = {
       from: USER_EMAIL,
       to: toEmail,
-      subject: "Welcome to Our Platform 🙌",
+      subject: "Welcome to Student Tutor Hub 🙌",
       html: verificationEmailHtml,
     };
 
@@ -156,12 +158,12 @@ export default {
   sendVerificationNotification: () => {
     let confirmationEmailHtml = fs.readFileSync(
       path.join(__dirname, "../views/VerificationNotification", "index.html"),
-      "utf-8",
+      "utf-8"
     );
 
     confirmationEmailHtml = confirmationEmailHtml.replace(
       "${frontendUrl}",
-      `${NODE_ENV === "production" ? "https://yourdomain.com" : "http://localhost:5173"}/login`,
+      `${NODE_ENV === "production" ? "https://studenttutorhub.org" : "http://localhost:5173"}/login`
     );
 
     return confirmationEmailHtml;

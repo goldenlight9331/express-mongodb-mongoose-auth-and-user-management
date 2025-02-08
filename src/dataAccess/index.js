@@ -20,7 +20,7 @@ export const dataAccess = {
 
   fetch: {
     allUsers: async () => {
-      return await User.find().select("-password");
+      return await User.find().select("-password -isRemembered");
     },
 
     userByEmail: async (email) => {
