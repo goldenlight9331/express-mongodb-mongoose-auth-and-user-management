@@ -9,8 +9,8 @@ import {
   dirname,
 } from "#packages/index.js";
 
-import { dataAccess } from "#dataAccess/index.js";
 import env from "#env/index.js";
+import { dataAccess } from "#dataAccess/index.js";
 
 const {
   NODE_ENV,
@@ -125,7 +125,35 @@ export default {
     return true;
   },
 
-  verificationNotification: () => {
+  sendVerificationEmail: async (toEmail, verificationToken) => {
+    let verificationEmailHtml = fs.readFileSync(
+      path.join(__dirname, "../views/VerificationEmail", "index.html"),
+      "utf-8",
+    );
+
+    verificationEmailHtml = verificationEmailHtml.replace(
+      "${backendUrl}",
+      `${NODE_ENV === "production" ? "https://api.studenttutorhub.org" : "http://localhost:5000"}`,
+    );
+
+    verificationEmailHtml = verificationEmailHtml.replace(
+      "${verificationToken}",
+      verificationToken,
+    );
+
+    const mailOptions = {
+      from: USER_EMAIL,
+      to: toEmail,
+      subject: "Welcome to Student Tutor Hub 🙌",
+      html: verificationEmailHtml,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    logger.info(`Email sent: ${info.response}`);
+    return true;
+  },
+
+  sendVerificationNotification: () => {
     let confirmationEmailHtml = fs.readFileSync(
       path.join(__dirname, "../views/VerificationNotification", "index.html"),
       "utf-8",
@@ -133,11 +161,7 @@ export default {
 
     confirmationEmailHtml = confirmationEmailHtml.replace(
       "${frontendUrl}",
-      `${
-        NODE_ENV === "production"
-          ? "https://studenttutorhub.org"
-          : "http://localhost:5173"
-      }/login`,
+      `${NODE_ENV === "production" ? "https://studenttutorhub.org" : "http://localhost:5173"}/login`,
     );
 
     return confirmationEmailHtml;

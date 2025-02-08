@@ -40,6 +40,7 @@
     "#env/*": "./src/env/*",
     "#middleware/*": "./src/middleware/*",
     "#models/*": "./src/models/*",
+    "#modules/*": "./src/modules/*",
     "#packages/*": "./src/packages/*",
     "#views/*": "./src/views/*",
     "#routes/*": "./src/routes/*",

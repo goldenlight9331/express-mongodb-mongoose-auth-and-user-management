@@ -3,7 +3,7 @@ import { createError } from "#packages/index.js";
 import utilities from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
-const { decodeToken, verificationNotification } = utilities;
+const { decodeToken, sendVerificationNotification } = utilities;
 const { update } = dataAccess;
 
 const emailService = {
@@ -22,7 +22,7 @@ const emailService = {
       throw createError(500, "An error occurred while verifying the email");
     }
 
-    const result = verificationNotification();
+    const result = sendVerificationNotification();
 
     return result;
   },
