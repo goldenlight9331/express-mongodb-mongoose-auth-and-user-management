@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Verification</title>
+    <style>
+      /* Base Styles */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      /* Container */
+      .container {
+        max-width: 400px;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin: auto;
+      }
+
+      /* Heading */
+      h2 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+
+      /* Message */
+      p {
+        font-size: 16px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      /* Verify Button */
+      .verify-button {
+        display: inline-block;
+        color: white;
+        background-color: #3498db;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s ease;
+      }
+
+      .verify-button:hover {
+        background-color: #2980b9;
+      }
+
+      /* Footer */
+      .footer {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Verify Your Email</h2>
+      <p>Hi,</p>
+      <p>
+        Thank you for signing up! Please verify your email address to complete
+        your registration.
+      </p>
+
+      <a
+        href="${backendUrl}/api/v1/email/verify/${verificationToken}"
+        class="verify-button"
+      >
+        Verify Email
+      </a>
+
+      <p class="footer">Best Regards, <br />Your Company Name</p>
+    </div>
+  </body>
+</html>

@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "license": "ISC",
-  "main": "src/index.js",
+  "main": "src/app.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
     "format": "prettier --write \"./**/*.{js,html}\"",
     "lint": "eslint \"./**/*.js\"",
-    "seedDatabase": "node scripts/index.js"
+    "seedDatabase": "node scripts/seed-database.js"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.4.0",
@@ -34,11 +34,9 @@
     "winston": "^3.17.0"
   },
   "imports": {
-    "#public/*": "./src/public/*",
-    "#dataAccess/*": "./src/dataAccess/*",
-    "#database/*": "./src/database/*",
+    "#config/*": "./src/config/*",
+    "#dataAccess/*": "./src/data-access/*",
     "#dtos/*": "./src/dtos/*",
-    "#env/*": "./src/env/*",
     "#middleware/*": "./src/middleware/*",
     "#models/*": "./src/models/*",
     "#modules/*": "./src/modules/*",

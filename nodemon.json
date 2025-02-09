@@ -1,6 +1,16 @@
 {
-  "watch": ["src", ".env"],
+  "watch": [
+    "src",
+    ".env"
+  ],
   "ext": "js,json",
-  "ignore": ["node_modules"],
-  "exec": "node ./src/index.js"
+  "ignore": [
+    "node_modules"
+  ],
+  "exec": "node src/app.js",
+  "restartable": "rs",
+  "verbose": true,
+  "env": {
+    "NODE_ENV": "development"
+  }
 }

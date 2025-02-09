@@ -9,8 +9,8 @@ import {
   dirname,
 } from "#packages/index.js";
 
-import { asyncHandler, decodeToken, logger } from "#utils/index.js";
-import env from "#env/index.js";
+import { asyncHandler, decodeToken } from "#utils/index.js";
+import { logger, env } from "#config/index.js";
 
 const { NODE_ENV } = env;
 

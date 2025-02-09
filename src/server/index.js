@@ -1,5 +1,4 @@
-import { logger } from "#utils/index.js";
-import env from "#env/index.js";
+import { logger, env } from "#config/index.js";
 
 const { PORT } = env;
 
