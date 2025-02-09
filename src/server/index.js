@@ -1,7 +1,6 @@
-import utilities from "#utilities/index.js";
+import { logger } from "#utilities/index.js";
 import env from "#env/index.js";
 
-const { logger } = utilities;
 const { PORT } = env;
 
 const startServer = (app) => {

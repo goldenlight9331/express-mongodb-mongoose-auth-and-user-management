@@ -37,9 +37,10 @@
 
 ## Email Endpoints 📧
 
-| **Method** | **Endpoint**                                    | **Description**                  |
-| ---------- | ----------------------------------------------- | -------------------------------- |
+| **Method** | **Endpoint**                              | **Description**                  |
+| ---------- | ----------------------------------------- | -------------------------------- |
 | `GET`      | `/api/v1/email/verify/:verificationToken` | Verifies a user's email address. |
+| `POST`     | `/api/v1/email/send-verification`         | Sends a verification email.      |
 
 ## Notes
 

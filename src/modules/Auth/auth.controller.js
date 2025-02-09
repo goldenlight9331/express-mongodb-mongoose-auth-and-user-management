@@ -1,7 +1,5 @@
-import utilities from "#utilities/index.js";
+import { asyncHandler } from "#utilities/index.js";
 import authService from "./auth.service.js";
-
-const { asyncHandler } = utilities;
 
 const authController = {
   signUp: asyncHandler(async (req, res) => {

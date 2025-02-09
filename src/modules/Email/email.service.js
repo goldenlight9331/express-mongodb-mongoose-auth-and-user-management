@@ -1,14 +1,13 @@
 import { createError } from "#packages/index.js";
 
-import utilities from "#utilities/index.js";
-import { dataAccess } from "#dataAccess/index.js";
-
-const {
+import {
   decodeToken,
   generateVerificationToken,
   sendVerificationNotification,
   sendVerificationEmail,
-} = utilities;
+} from "#utilities/index.js";
+import { dataAccess } from "#dataAccess/index.js";
+
 const { read, update } = dataAccess;
 
 const emailService = {

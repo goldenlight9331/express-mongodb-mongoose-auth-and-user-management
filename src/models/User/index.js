@@ -50,7 +50,7 @@ const UserSchema = new Schema(
       type: String,
       default: null,
     },
-    
+
     isEmailVerified: {
       type: Boolean,
       default: false,
@@ -60,11 +60,6 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
-
-    isRemembered: {
-      type: Boolean,
-      default: false,
-    }
   },
   {
     timestamps: true, // Adds createdAt and updatedAt timestamps to the document

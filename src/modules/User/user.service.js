@@ -1,10 +1,12 @@
-import { createError } from "#packages/index.js";
+import { createError, path, fileURLToPath, dirname } from "#packages/index.js";
 
-import utilities from "#utilities/index.js";
+import { deleteFile } from "#utilities/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
 const { read, update, remove } = dataAccess;
-const { deleteFile } = utilities;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const userService = {
   getAll: async () => {
@@ -24,15 +26,18 @@ const userService = {
     return user;
   },
   updateById: async (id, userData) => {
-    // read the existing user data
     const existingUser = await read.userById(id);
     if (!existingUser) {
       throw createError(404, "User not found");
     }
 
-    // If a new profile picture is uploaded, delete the old one
     if (userData.profilePicture && existingUser.profilePicture) {
-      deleteFile(existingUser.profilePicture); // Delete the old profile picture
+      const oldProfilePicturePath = path.join(
+        __dirname,
+        "../../../public",
+        existingUser.profilePicture,
+      );
+      deleteFile(oldProfilePicturePath);
     }
 
     // Update the user data

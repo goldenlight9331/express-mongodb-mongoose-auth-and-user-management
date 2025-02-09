@@ -1,14 +1,13 @@
 import { createError } from "#packages/index.js";
 
-import utilities from "#utilities/index.js";
-import { dataAccess } from "#dataAccess/index.js";
-
-const {
+import {
   decodeToken,
   generateAuthToken,
   generateVerificationToken,
   sendVerificationEmail,
-} = utilities;
+} from "#utilities/index.js";
+import { dataAccess } from "#dataAccess/index.js";
+
 const { save, read } = dataAccess;
 
 const authService = {

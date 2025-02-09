@@ -7,9 +7,9 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "format": "prettier --write \"src/**/*.{js,html}\"",
-    "lint": "eslint \"src/**/*.js\"",
-    "seedDatabase": "node src/scripts/index.js"
+    "format": "prettier --write \"./**/*.{js,html}\"",
+    "lint": "eslint \"./**/*.js\"",
+    "seedDatabase": "node scripts/index.js"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.4.0",
@@ -34,6 +34,7 @@
     "winston": "^3.17.0"
   },
   "imports": {
+    "#public/*": "./src/public/*",
     "#dataAccess/*": "./src/dataAccess/*",
     "#database/*": "./src/database/*",
     "#dtos/*": "./src/dtos/*",
@@ -42,7 +43,6 @@
     "#models/*": "./src/models/*",
     "#modules/*": "./src/modules/*",
     "#packages/*": "./src/packages/*",
-    "#views/*": "./src/views/*",
     "#routes/*": "./src/routes/*",
     "#server/*": "./src/server/*",
     "#utilities/*": "./src/utilities/*"

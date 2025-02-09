@@ -1,12 +1,11 @@
 import { mongoose } from "#packages/index.js";
 
-import utilities from "#utilities/index.js";
+import { logger } from "#utilities/index.js";
 import env from "#env/index.js";
 
 let isConnected = false;
 
 const { DATABASE_URI } = env;
-const { logger } = utilities;
 
 const connectDatabase = async () => {
   if (isConnected) {

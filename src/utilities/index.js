@@ -26,27 +26,25 @@ const {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+/** Logger Configuration */
 const createLogger = () => {
-  const logConfig = {
-    levels: { error: 0, warn: 1, info: 2, debug: 3 },
-    colors: { error: "red", warn: "yellow", info: "green", debug: "blue" },
-  };
+  const levels = { error: 0, warn: 1, info: 2, debug: 3 };
+  const colors = { error: "red", warn: "yellow", info: "green", debug: "blue" };
 
-  winston.addColors(logConfig.colors);
-
-  const consoleFormat = winston.format.combine(
-    winston.format.colorize(),
-    winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-    winston.format.printf(({ level, message, timestamp }) => {
-      return `${timestamp} [${level}]: ${message}`;
-    }),
-  );
+  winston.addColors(colors);
 
   return winston.createLogger({
-    levels: logConfig.levels,
+    levels,
     transports: [
       new winston.transports.Console({
-        format: consoleFormat,
+        format: winston.format.combine(
+          winston.format.colorize(),
+          winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+          winston.format.printf(
+            ({ level, message, timestamp }) =>
+              `${timestamp} [${level}]: ${message}`,
+          ),
+        ),
         level: NODE_ENV === "production" ? "warn" : "debug",
         handleExceptions: true,
       }),
@@ -57,26 +55,24 @@ const createLogger = () => {
 
 const logger = createLogger();
 
+/** Nodemailer Transporter */
 const createTransporter = () => {
   const transporter = nodemailer.createTransport({
-    service: EMAIL_SERVICE, // You can also use 'smtp' and provide the custom SMTP server if needed
-    host: EMAIL_HOST, // Replace with the correct SMTP server provided by Hostinger
-    port: EMAIL_PORT, // Usually 587 for TLS or 465 for SSL
-    secure: false, // Set to true if you're using SSL (465)
-    auth: {
-      user: USER_EMAIL,
-      pass: USER_PASSWORD,
-    },
-    connectionTimeout: 60000, // 1 minute timeout for establishing the connection
-    greetingTimeout: 30000, // Timeout for receiving the greeting
-    sendTimeout: 30000, // Timeout for sending the message
+    service: EMAIL_SERVICE,
+    host: EMAIL_HOST,
+    port: EMAIL_PORT,
+    secure: false, // Set true for SSL (465), false for TLS (587)
+    auth: { user: USER_EMAIL, pass: USER_PASSWORD },
+    connectionTimeout: 60000,
+    greetingTimeout: 30000,
+    sendTimeout: 30000,
   });
 
   transporter.verify((error) => {
     if (error) {
-      logger.error(`Error connecting to email server: ${error.message}`);
+      logger.error(`Email server connection error: ${error.message}`);
     } else {
-      logger.info("Email server is ready to send messages".white.bold);
+      logger.info("Email server is ready to send messages.");
     }
   });
 
@@ -85,80 +81,87 @@ const createTransporter = () => {
 
 const transporter = createTransporter();
 
-export default {
-  asyncHandler: (fn) => async (req, res, next) => {
-    try {
-      await fn(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  },
+/** Utility Functions */
+const asyncHandler = (fn) => async (req, res, next) => {
+  try {
+    await fn(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+};
 
-  generateVerificationToken: (id) => {
-    return jwt.sign({ id }, JWT_SECRET_KEY, {
-      expiresIn: JWT_VERIFICATION_LINK_EXPIRY,
-    });
-  },
+const generateVerificationToken = (id) =>
+  jwt.sign({ id }, JWT_SECRET_KEY, { expiresIn: JWT_VERIFICATION_LINK_EXPIRY });
 
-  generateAuthToken: (role, id, isRemembered) => {
-    const expiry = isRemembered ? JWT_LONG_EXPIRY : JWT_SHORT_EXPIRY;
-    return jwt.sign({ role, id }, JWT_SECRET_KEY, {
-      expiresIn: expiry,
-    });
-  },
+const generateAuthToken = (role, id, isRemembered) => {
+  const expiry = isRemembered ? JWT_LONG_EXPIRY : JWT_SHORT_EXPIRY;
+  return jwt.sign({ role, id }, JWT_SECRET_KEY, { expiresIn: expiry });
+};
 
-  decodeToken: async (token) => {
-    return jwt.verify(token, JWT_SECRET_KEY);
-  },
+const decodeToken = async (token) => jwt.verify(token, JWT_SECRET_KEY);
 
-  sendVerificationEmail: async (toEmail, verificationToken) => {
-    let verificationEmailHtml = fs.readFileSync(
-      path.join(__dirname, "../views/VerificationEmail", "index.html"),
-      "utf-8",
-    );
+/** Email Utility */
+const readEmailTemplate = (folder, filename) => {
+  const filePath = path.join(
+    __dirname,
+    `../../public/views/${folder}`,
+    filename,
+  );
+  return fs.readFileSync(filePath, "utf-8");
+};
 
-    verificationEmailHtml = verificationEmailHtml.replace(
-      "${backendUrl}",
-      `${NODE_ENV === "production" ? "https://api.studenttutorhub.org" : "http://localhost:5000"}`,
-    );
+const sendVerificationEmail = async (toEmail, verificationToken) => {
+  const backendUrl =
+    NODE_ENV === "production"
+      ? "https://api.studenttutorhub.org"
+      : "http://localhost:5000";
 
-    verificationEmailHtml = verificationEmailHtml.replace(
-      "${verificationToken}",
-      verificationToken,
-    );
+  let emailHtml = readEmailTemplate("VerificationEmail", "index.html")
+    .replace("${backendUrl}", backendUrl)
+    .replace("${verificationToken}", verificationToken);
 
-    const mailOptions = {
-      from: USER_EMAIL,
-      to: toEmail,
-      subject: "Welcome to Student Tutor Hub 🙌",
-      html: verificationEmailHtml,
-    };
+  const mailOptions = {
+    from: USER_EMAIL,
+    to: toEmail,
+    subject: "Welcome to Student Tutor Hub 🙌",
+    html: emailHtml,
+  };
 
-    const info = await transporter.sendMail(mailOptions);
-    logger.info(`Email sent: ${info.response}`);
-    return true;
-  },
+  const info = await transporter.sendMail(mailOptions);
+  logger.info(`Verification email sent to ${toEmail}: ${info.response}`);
+  return true;
+};
 
-  sendVerificationNotification: () => {
-    let confirmationEmailHtml = fs.readFileSync(
-      path.join(__dirname, "../views/VerificationNotification", "index.html"),
-      "utf-8",
-    );
+const sendVerificationNotification = () => {
+  const frontendUrl =
+    NODE_ENV === "production"
+      ? "https://studenttutorhub.org"
+      : "http://localhost:5173/login";
 
-    confirmationEmailHtml = confirmationEmailHtml.replace(
-      "${frontendUrl}",
-      `${NODE_ENV === "production" ? "https://studenttutorhub.org" : "http://localhost:5173"}/login`,
-    );
+  return readEmailTemplate("VerificationNotification", "index.html").replace(
+    "${frontendUrl}",
+    frontendUrl,
+  );
+};
 
-    return confirmationEmailHtml;
-  },
+/** File Utility */
+const deleteFile = (filePath) => {
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+    logger.info(`File deleted: ${filePath}`);
+  } else {
+    logger.warn(`File not found: ${filePath}`);
+  }
+};
 
-  deleteFile: (filePath) => {
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-  },
-
+export {
+  asyncHandler,
+  generateVerificationToken,
+  generateAuthToken,
+  decodeToken,
+  sendVerificationEmail,
+  sendVerificationNotification,
+  deleteFile,
   transporter,
   logger,
 };

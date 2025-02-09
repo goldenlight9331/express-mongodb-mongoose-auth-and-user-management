@@ -1,7 +1,5 @@
-import utilities from "#utilities/index.js";
+import { asyncHandler } from "#utilities/index.js";
 import userService from "./user.service.js";
-
-const { asyncHandler } = utilities;
 
 const userController = {
   getAll: asyncHandler(async (_, res) => {
@@ -20,7 +18,8 @@ const userController = {
     const userData = req.body;
 
     if (req.files && req.files.profilePicture) {
-      userData.profilePicture = req.files.profilePicture[0].path;
+      const file = req.files.profilePicture[0];
+      userData.profilePicture = `/uploads/${file.filename}`;
     }
 
     const result = await userService.updateById(id, userData);
