@@ -1,6 +1,6 @@
 import { mongoose } from "#packages/index.js";
 
-import { logger } from "#utilities/index.js";
+import { logger } from "#utils/index.js";
 import env from "#env/index.js";
 
 let isConnected = false;

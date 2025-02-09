@@ -1,6 +1,6 @@
 import { createError, path, fileURLToPath, dirname } from "#packages/index.js";
 
-import { deleteFile } from "#utilities/index.js";
+import { deleteFile } from "#utils/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
 const { read, update, remove } = dataAccess;

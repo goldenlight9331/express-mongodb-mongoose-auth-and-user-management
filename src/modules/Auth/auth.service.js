@@ -5,7 +5,7 @@ import {
   generateAuthToken,
   generateVerificationToken,
   sendVerificationEmail,
-} from "#utilities/index.js";
+} from "#utils/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
 const { save, read } = dataAccess;

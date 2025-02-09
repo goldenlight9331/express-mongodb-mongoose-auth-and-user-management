@@ -1,10 +1,10 @@
 import { mongoose, bcrypt, faker } from "#packages/index.js";
 
 import { User } from "#models/index.js"; // adjust the model import path if necessary
-import utilities from "#utilities/index.js";
+import utils from "#utils/index.js";
 import env from "#env/index.js"; // adjust this import as needed
 
-const { logger } = utilities;
+const { logger } = utils;
 const { DATABASE_URI } = env;
 
 async function main() {

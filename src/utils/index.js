@@ -113,7 +113,7 @@ const readEmailTemplate = (folder, filename) => {
 const sendVerificationEmail = async (toEmail, verificationToken) => {
   const backendUrl =
     NODE_ENV === "production"
-      ? "https://api.studenttutorhub.org"
+      ? "https://api.yourDomain.org"
       : "http://localhost:5000";
 
   let emailHtml = readEmailTemplate("VerificationEmail", "index.html")
@@ -123,7 +123,7 @@ const sendVerificationEmail = async (toEmail, verificationToken) => {
   const mailOptions = {
     from: USER_EMAIL,
     to: toEmail,
-    subject: "Welcome to Student Tutor Hub 🙌",
+    subject: "Welcome to Our Platform 🙌",
     html: emailHtml,
   };
 
@@ -135,7 +135,7 @@ const sendVerificationEmail = async (toEmail, verificationToken) => {
 const sendVerificationNotification = () => {
   const frontendUrl =
     NODE_ENV === "production"
-      ? "https://studenttutorhub.org"
+      ? "https://yourDomain.org"
       : "http://localhost:5173/login";
 
   return readEmailTemplate("VerificationNotification", "index.html").replace(

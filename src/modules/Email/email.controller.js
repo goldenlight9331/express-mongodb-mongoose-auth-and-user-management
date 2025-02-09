@@ -1,4 +1,4 @@
-import { asyncHandler } from "#utilities/index.js";
+import { asyncHandler } from "#utils/index.js";
 import emailService from "./email.service.js";
 
 const emailController = {

@@ -45,6 +45,6 @@
     "#packages/*": "./src/packages/*",
     "#routes/*": "./src/routes/*",
     "#server/*": "./src/server/*",
-    "#utilities/*": "./src/utilities/*"
+    "#utils/*": "./src/utils/*"
   }
 }
