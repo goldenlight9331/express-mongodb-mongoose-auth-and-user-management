@@ -1,7 +1,7 @@
 # API Endpoints Documentation 📚
 
 **Author:** Sharjeel Faiq  
-**Description:** This document provides an overview of the API endpoints.
+**Description:** This document provides an overview of the API endpoints for Student Tutor Hub.
 
 ---
 
