@@ -1,46 +1,54 @@
-# Summary of [sharjeelfaiq/express-mongodb-mongoose-auth-and-user-management](https://github.com/sharjeelfaiq/express-mongodb-mongoose-auth-and-user-management)
+## Scripts 🐜
 
-This repository provides a **Node.js** template that implements **user authentication** and **management** using **Express.js** and **MongoDB**. It's designed to be a starting point for developers building web applications that require user-related functionalities like registration, login, and management.
+The `package.json` file contains several useful scripts:
 
----
+-   `npm start`: Starts the production server.
+-   `npm run dev`: Starts the development server with Nodemon for automatic restarts.
+-   `npm run seed`: Seeds the database with initial data using the script.
+-   `npm run lint`: Runs ESLint to check for code quality issues.
+-   `npm run lint:fix`: Runs ESLint and fixes issues automatically.
+-   `npm run format`: Formats the code using Prettier.
 
-## Purpose of the Project 🎯
+## API Endpoints 📌
 
-The purpose of the **express-mongodb-mongoose-auth-and-user-management** project is to provide a foundational template for developers looking to implement user authentication and management features in their web applications. Specifically, it aims to:
+See the [API Endpoints Documentation](./docs/API_ENDPOINTS.md) for a comprehensive list of endpoints, their descriptions, and required parameters.
 
-- **Simplify User Authentication**: Offer a straightforward way to manage user registration, login, and logout processes.
-- **Enhance Security**: Implement secure practices such as password hashing and **JWT (JSON Web Tokens)** for authentication, ensuring user data is protected 🔒.
-- **Enable User Management**: Provide **CRUD (Create, Read, Update, Delete)** functionalities for managing user accounts, allowing applications to handle user data easily.
-- **Serve as a Starter Template**: Act as a boilerplate for developers, saving time and effort in setting up user authentication systems from scratch.
+Here is a quick overview:
 
-Overall, this project is geared towards helping developers quickly integrate robust user management features into their applications using **Express.js** and **MongoDB**.
+### Auth Endpoints 🔑
 
----
+| Method | Endpoint                    | Description                                      |
+| ------ | --------------------------- | ------------------------------------------------ |
+| `POST` | `/api/v1/auth/signup`       | Registers a new user account.                    |
+| `POST` | `/api/v1/auth/signin`       | Authenticates a user and provides a session token. |
+| `POST` | `/api/v1/auth/signout`      | Logs out the authenticated user.                  |
+| `POST` | `/api/v1/auth/forgot-password` | Sends a password reset link.                    |
 
-## Main Features 🚀
+### User Endpoints 👤
 
-- **User Registration**: Secure user account creation.
-- **Login/Logout**: Seamless authentication and session handling.
-- **Password Hashing**: Keeps user passwords safe and encrypted 🔒.
-- **JWT Authentication**: Uses **JSON Web Tokens** for secure access and sessions 🔑.
-- **CRUD Operations**: Full **Create, Read, Update, Delete** functionalities for managing users ✍️.
+| Method | Endpoint           | Description                                      |
+| ------ | ------------------ | ------------------------------------------------ |
+| `GET`  | `/api/v1/user/`    | Retrieves all users.                           |
+| `GET`  | `/api/v1/user/:id` | Retrieves a specific user by ID.                 |
+| `PATCH`| `/api/v1/user/:id` | Updates a specific user by ID.                   |
+| `DELETE`|`/api/v1/user/:id` | Deletes a specific user by ID.                 |
 
----
+### Email Endpoints 📧
 
-## Technology Stack 💻
+| Method | Endpoint                              | Description                                              |
+| ------ | ------------------------------------- | -------------------------------------------------------- |
+| `GET`  | `/api/v1/email/verify/:verificationToken` | Verifies a user's email address.                        |
+| `POST` | `/api/v1/email/send-verification`     | Sends a verification email.                            |
 
-- **Node.js**: Server-side JavaScript runtime.
-- **Express.js**: Web framework for building APIs.
-- **MongoDB**: NoSQL database for fast and scalable data storage.
-- **Mongoose**: ODM (Object Data Modeling) library for MongoDB.
-- **JWT (JSON Web Tokens)**: Secure token-based authentication.
+## Contributing 🤝
 
----
+Contributions are welcome! Please follow these steps:
 
-## License 📜
+1.  Fork the repository.
+2.  Create a new branch for your feature or bug fix.
+3.  Make your changes and commit them with descriptive messages.
+4.  Submit a pull request.
 
-Licensed under the **MIT License**, enabling free usage, modification, and distribution.
+## Author ✍️
 
----
-
-This template is perfect for anyone looking to integrate **authentication** and **user management** into their **Node.js** apps quickly and securely!
+**Sharjeel Faiq**
