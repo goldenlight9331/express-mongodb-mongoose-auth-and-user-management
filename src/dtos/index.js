@@ -41,14 +41,6 @@ const roleValidation = Joi.string()
     "any.only": "Role must be either admin, tutor or student",
   });
 
-const isApprovedValidation = Joi.boolean()
-  .truthy("yes", "true", 1)
-  .falsy("no", "false", 0)
-  .optional()
-  .messages({
-    "boolean.base": "isApproved should be a boolean value",
-  });
-
 const isRememberedValidation = Joi.boolean()
   .truthy("yes", "true", 1)
   .falsy("no", "false", 0)
@@ -64,7 +56,6 @@ const dtos = {
     email: emailValidation,
     password: passwordValidation,
     role: roleValidation,
-    isApproved: isApprovedValidation,
   }),
   signIn: Joi.object({
     email: emailValidation,

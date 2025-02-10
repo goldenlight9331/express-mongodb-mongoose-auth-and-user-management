@@ -18,7 +18,7 @@ const userService = {
     return users;
   },
   getById: async (id) => {
-    const user = await read.userById(id);
+    const user = await read.byUserId(id);
     if (!user) {
       throw createError(404, "User not found");
     }
@@ -26,22 +26,28 @@ const userService = {
     return user;
   },
   updateById: async (id, userData) => {
-    const existingUser = await read.userById(id);
+    const existingUser = await read.byUserId(id);
     if (!existingUser) {
       throw createError(404, "User not found");
+    }
+
+    if (userData.userName && userData.userName !== existingUser.userName) {
+      const userWithSameUsername = await read.byUsername(userData.userName);
+      if (userWithSameUsername) {
+        throw createError(409, "Username already exists");
+      }
     }
 
     if (userData.profilePicture && existingUser.profilePicture) {
       const oldProfilePicturePath = path.join(
         __dirname,
-        "../../../public",
-        existingUser.profilePicture,
+        "../../../public/uploads",
+        existingUser.profilePicture
       );
       deleteFile(oldProfilePicturePath);
     }
 
-    // Update the user data
-    const updatedUser = await update.userById(id, userData);
+    const updatedUser = await update.byUserId(id, userData);
     if (!updatedUser) {
       throw createError(500, "User update failed");
     }
@@ -49,7 +55,7 @@ const userService = {
     return updatedUser;
   },
   deleteById: async (id) => {
-    const user = await remove.userById(id);
+    const user = await remove.byUserId(id);
     if (!user) {
       throw createError(404, "User not found");
     }

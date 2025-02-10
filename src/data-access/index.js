@@ -2,14 +2,14 @@ import { User, BlacklistedToken } from "#models/index.js";
 
 export const dataAccess = {
   save: {
-    user: async (firstName, lastName, email, password, role, isApproved) => {
+    user: async (firstName, lastName, userName, email, password, role) => {
       return await User.create({
         firstName,
         lastName,
+        userName,
         email,
         password,
         role,
-        isApproved,
       });
     },
 
@@ -23,14 +23,18 @@ export const dataAccess = {
       return await User.find().select("-password -isRemembered");
     },
 
-    userByEmail: async (email) => {
+    byEmail: async (email) => {
       return await User.findOne({
         email,
       });
     },
 
-    userById: async (id) => {
+    byUserId: async (id) => {
       return await User.findById(id).select("-password");
+    },
+
+    byUsername: async (userName) => {
+      return await User.findOne({ userName }).select("-password");
     },
 
     blacklistedToken: async (token) => {
@@ -39,14 +43,14 @@ export const dataAccess = {
   },
 
   update: {
-    userById: async (id, userData) => {
+    byUserId: async (id, userData) => {
       return await User.findByIdAndUpdate(id, userData, {
         new: true,
         upsert: true,
       }).select("-password");
     },
 
-    userByEmail: async (email, userData) => {
+    byEmail: async (email, userData) => {
       return await User.findOneAndUpdate({ email }, userData, {
         new: true,
         upsert: true,
@@ -57,13 +61,13 @@ export const dataAccess = {
       return await User.findOneAndUpdate(
         { email },
         { password },
-        { new: true, upsert: true },
+        { new: true, upsert: true }
       );
     },
   },
 
   remove: {
-    userById: async (id) => {
+    byUserId: async (id) => {
       return await User.findByIdAndDelete(id);
     },
   },

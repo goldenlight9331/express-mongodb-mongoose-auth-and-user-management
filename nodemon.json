@@ -9,8 +9,9 @@
   ],
   "exec": "node src/app.js",
   "restartable": "rs",
-  "verbose": true,
+  "verbose": false,
   "env": {
-    "NODE_ENV": "development"
+    "NODE_ENV": "development",
+    "PORT": 5000
   }
 }

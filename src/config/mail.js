@@ -20,7 +20,7 @@ const createTransporter = () => {
     if (error) {
       logger.error(`Email server connection error: ${error.message}`);
     } else {
-      logger.info("Email server is ready to send messages.".cyan.bold);
+      logger.info("Email server is ready to send messages.".magenta);
     }
   });
 
