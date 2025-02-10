@@ -40,7 +40,6 @@ const userService = {
       deleteFile(oldProfilePicturePath);
     }
 
-    // Update the user data
     const updatedUser = await update.userById(id, userData);
     if (!updatedUser) {
       throw createError(500, "User update failed");
