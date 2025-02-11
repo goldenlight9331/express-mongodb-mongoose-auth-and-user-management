@@ -2,6 +2,7 @@ export { default as axios } from "axios";
 export { default as bcrypt } from "bcryptjs";
 export { default as colors } from "colors";
 export { default as cors } from "cors";
+export { default as cookieParser } from "cookie-parser";
 export { default as createError } from "http-errors";
 export { default as crypto } from "crypto";
 export { default as dotenv } from "dotenv";

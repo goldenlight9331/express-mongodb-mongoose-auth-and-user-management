@@ -19,10 +19,10 @@ Here is a quick overview:
 
 | Method | Endpoint                    | Description                                      |
 | ------ | --------------------------- | ------------------------------------------------ |
-| `POST` | `/api/v1/auth/signup`       | Registers a new user account.                    |
-| `POST` | `/api/v1/auth/signin`       | Authenticates a user and provides a session token. |
-| `POST` | `/api/v1/auth/signout`      | Logs out the authenticated user.                  |
-| `POST` | `/api/v1/auth/forgot-password` | Sends a password reset link.                    |
+| `POST` | `/api/v1/signup`       | Registers a new user account.                    |
+| `POST` | `/api/v1/signin`       | Authenticates a user and provides a session token. |
+| `POST` | `/api/v1/signout`      | Logs out the authenticated user.                  |
+| `POST` | `/api/v1/forgot-password` | Sends a password reset link.                    |
 
 ### User Endpoints 👤
 
@@ -37,8 +37,8 @@ Here is a quick overview:
 
 | Method | Endpoint                              | Description                                              |
 | ------ | ------------------------------------- | -------------------------------------------------------- |
-| `GET`  | `/api/v1/email/verify/:verificationToken` | Verifies a user's email address.                        |
-| `POST` | `/api/v1/email/send-verification`     | Sends a verification email.                            |
+| `GET`  | `/api/v1/verify-email/:verificationToken` | Verifies a user's email address.                        |
+| `POST` | `/api/v1/send-verification-email`     | Sends a verification email.                            |
 
 ## Contributing 🤝
 

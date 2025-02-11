@@ -19,7 +19,7 @@ const emailService = {
 
     const id = decoded.id;
 
-    const isUserUpdated = await update.byUserId(id, {
+    const isUserUpdated = await update.userById(id, {
       isEmailVerified: true,
     });
     if (!isUserUpdated) {
@@ -32,7 +32,7 @@ const emailService = {
   },
 
   sendVerificationEmail: async (email) => {
-    const user = await read.byEmail(email);
+    const user = await read.userByEmail(email);
     if (!user) {
       throw createError(404, "User not found");
     }

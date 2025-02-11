@@ -12,21 +12,21 @@ const { save, read } = dataAccess;
 
 const authService = {
   signUp: async ({ firstName, lastName, email, password, role }) => {
-    const existingUser = await read.byEmail(email);
+    const existingUser = await read.userByEmail(email);
     if (existingUser) {
       throw createError(400, "A user with this email already exists.");
     }
 
-    const userName =
+    const username =
       `${firstName}${crypto.createHash("sha256").update(email).digest("hex").substring(0, 8)}`.toLowerCase();
 
     const newUser = await save.user(
       firstName,
       lastName,
-      userName,
+      username,
       email,
       password,
-      role
+      role,
     );
     if (!newUser) {
       throw createError(500, "Failed to create a new user.");
@@ -46,7 +46,7 @@ const authService = {
   },
 
   signIn: async ({ email, password, isRemembered }) => {
-    const existingUser = await read.byEmail(email);
+    const existingUser = await read.userByEmail(email);
     if (!existingUser) {
       throw createError(401, "Invalid email or password.");
     }
@@ -59,7 +59,7 @@ const authService = {
     const token = generateAuthToken(
       existingUser.role,
       existingUser._id,
-      isRemembered
+      isRemembered,
     );
     if (!token) {
       throw createError(500, "Token generation failed");
@@ -92,7 +92,7 @@ const authService = {
   },
 
   forgotPassword: async (email, password) => {
-    const existingUser = await read.byEmail(email);
+    const existingUser = await read.userByEmail(email);
     if (!existingUser) {
       throw createError(400, "A user with this email does not exist.");
     }

@@ -21,7 +21,7 @@ const UserSchema = new Schema(
       minlength: [2, "Last name must be at least 2 characters long"],
     },
 
-    userName: {
+    username: {
       type: String,
       required: [true, "Username is required"],
       unique: true,
@@ -115,4 +115,4 @@ UserSchema.methods.comparePassword = async function (password) {
   }
 };
 
-export const User = model("User", UserSchema);
+export const User = model("Users", UserSchema);

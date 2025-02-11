@@ -35,11 +35,7 @@ const decodeToken = async (token) => jwt.verify(token, JWT_SECRET_KEY);
 
 /** Email Utility */
 const readEmailTemplate = (folder, filename) => {
-  const filePath = path.join(
-    __dirname,
-    `../../views/${folder}`,
-    filename,
-  );
+  const filePath = path.join(__dirname, `../../src/views/${folder}`, filename);
   return fs.readFileSync(filePath, "utf-8");
 };
 

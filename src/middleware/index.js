@@ -1,4 +1,5 @@
 import {
+  cookieParser,
   createError,
   multer,
   morgan,
@@ -12,7 +13,7 @@ import {
 import { asyncHandler, decodeToken } from "#utils/index.js";
 import { logger, env } from "#config/index.js";
 
-const { NODE_ENV } = env;
+const { NODE_ENV, COOKIE_NAME } = env;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,7 +24,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const corsOptions = {
   origin: true,
-  exposedHeaders: ["Authorization"],
+  credentials: true,
 };
 
 // Helper to validate file type based on mimetype and file extension
@@ -54,10 +55,12 @@ const upload = multer({
 const applyGlobalMiddleware = (app) => {
   app.use(morgan("dev"));
   app.use(cors(corsOptions));
+  app.use(cookieParser());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 };
 
+// eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
   const status = err.statusCode || 500;
   const message = err.message || "Something went wrong";
@@ -87,13 +90,9 @@ const validateDto = (schema) =>
   });
 
 const verifyAuthToken = asyncHandler(async (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  if (!authHeader) {
-    throw createError(403, "Authorization header is missing.");
-  }
-  const token = authHeader.split(" ")[1];
+  const token = req.cookies[COOKIE_NAME];
   if (!token) {
-    throw createError(403, "Token is missing in the authorization header.");
+    throw createError(403, "Token is missing.");
   }
   const decoded = await decodeToken(token);
   if (!decoded) {
@@ -117,8 +116,6 @@ const verifyAuthRole = (authorizedRole) =>
 const uploadFiles = upload.fields([
   { name: "profilePicture", maxCount: 1 },
   { name: "coverPhoto", maxCount: 1 },
-  { name: "qualificationCertificates", maxCount: 5 },
-  { name: "identityCardPictures", maxCount: 2 },
 ]);
 
 export {

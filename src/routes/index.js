@@ -19,9 +19,9 @@ rootRouter.get("/", (_, res) => {
 
 rootRouter.use("/api/v1", v1Router);
 
-v1Router.use("/auth", authRoutes);
-v1Router.use("/email", emailRoutes);
-v1Router.use("/user", verifyAuthToken, userRoutes);
+v1Router.use("/", authRoutes);
+v1Router.use("/", emailRoutes);
+v1Router.use("/users", verifyAuthToken, userRoutes);
 
 const createRoutes = (app) => {
   app.use(
