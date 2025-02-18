@@ -11,7 +11,7 @@ The `package.json` file contains several useful scripts:
 
 ## API Endpoints 📌
 
-See the [API Endpoints Documentation](./docs/swagger) for a comprehensive list of endpoints, their descriptions, and required parameters.
+See the [API Endpoints Documentation](./docs/swagger) for a comprehensive list of endpoints, their descriptions, and required parameters. Set-up the project and access the API documentation at `http://localhost:5000/api-docs`.
 
 Here is a quick overview:
 
