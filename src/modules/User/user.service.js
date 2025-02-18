@@ -1,4 +1,6 @@
-import { createError, path, fileURLToPath, dirname } from "#packages/index.js";
+import createError from "http-errors";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
 import { deleteFile } from "#utils/index.js";
 import { dataAccess } from "#dataAccess/index.js";
@@ -29,13 +31,6 @@ const userService = {
     const existingUser = await read.userById(id);
     if (!existingUser) {
       throw createError(404, "User not found");
-    }
-
-    if (userData.username && userData.username !== existingUser.username) {
-      const userWithSameUsername = await read.byUsername(userData.username);
-      if (userWithSameUsername) {
-        throw createError(409, "Username already exists");
-      }
     }
 
     if (userData.profilePicture && existingUser.profilePicture) {

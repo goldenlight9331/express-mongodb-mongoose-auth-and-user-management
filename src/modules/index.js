@@ -1,3 +1,3 @@
-export * from "./Auth/auth.routes.js";
-export * from "./User/user.routes.js";
-export * from "./Email/email.routes.js";
+export * from "./auth/auth.routes.js";
+export * from "./email/email.routes.js";
+export * from "./user/user.routes.js";

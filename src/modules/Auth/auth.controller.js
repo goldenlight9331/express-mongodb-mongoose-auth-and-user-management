@@ -12,12 +12,12 @@ const {
   COOKIE_PATH,
 } = env;
 
-const cookieOptions = (isRemembered) => {
+const getCookieOptions = (isRemembered) => {
   return {
     httpOnly: COOKIE_HTTP_ONLY, // Important:  Prevent client-side JavaScript access
     secure: NODE_ENV === "production", // Send only over HTTPS in production
     sameSite: COOKIE_SAME_SITE, // Prevent CSRF attacks
-    maxAge: eval(isRemembered ? COOKIE_LONG_EXPIRY : COOKIE_SHORT_EXPIRY),
+    maxAge: isRemembered ? COOKIE_LONG_EXPIRY : COOKIE_SHORT_EXPIRY,
     path: COOKIE_PATH, // Cookie is valid for the entire domain
   };
 };
@@ -33,9 +33,16 @@ const authController = {
     const userData = req.body;
     const result = await authService.signIn(userData);
     const token = result.token;
+
+    if (!COOKIE_NAME) {
+      throw new Error("COOKIE_NAME environment variable is not set");
+    }
+
+    const options = getCookieOptions(userData.isRemembered);
+
     res
       .status(200)
-      .cookie(COOKIE_NAME, token, cookieOptions(userData.isRemembered))
+      .cookie(COOKIE_NAME, token, { ...options, maxAge: undefined })
       .json({ ...result, token: undefined });
   }),
 
@@ -46,7 +53,13 @@ const authController = {
     }
 
     const result = await authService.signOut(token);
-    res.clearCookie(COOKIE_NAME, { path: COOKIE_PATH });
+
+    const options = getCookieOptions(false);
+    res.clearCookie(COOKIE_NAME, {
+      ...options,
+      maxAge: undefined,
+    });
+
     res.status(200).json(result);
   }),
 

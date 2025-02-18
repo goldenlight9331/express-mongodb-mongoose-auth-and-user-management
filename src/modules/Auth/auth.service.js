@@ -1,24 +1,20 @@
-import { createError, crypto } from "#packages/index.js";
+import createError from "http-errors";
 
 import {
+  generateToken,
   decodeToken,
-  generateAuthToken,
-  generateVerificationToken,
   sendVerificationEmail,
 } from "#utils/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
-const { save, read } = dataAccess;
+const { save, read, remove } = dataAccess;
 
 const authService = {
-  signUp: async ({ firstName, lastName, email, password, role }) => {
+  signUp: async ({ firstName, lastName, username, email, password, role }) => {
     const existingUser = await read.userByEmail(email);
     if (existingUser) {
       throw createError(400, "A user with this email already exists.");
     }
-
-    const username =
-      `${firstName}${crypto.createHash("sha256").update(email).digest("hex").substring(0, 8)}`.toLowerCase();
 
     const newUser = await save.user(
       firstName,
@@ -32,17 +28,19 @@ const authService = {
       throw createError(500, "Failed to create a new user.");
     }
 
-    const verificationToken = generateVerificationToken(newUser._id);
+    const verificationToken = generateToken(newUser._id);
     if (!verificationToken) {
+      await remove.userById(newUser._id);
       throw createError(500, "An error occurred while generating the token.");
     }
 
     const isEmailSent = await sendVerificationEmail(email, verificationToken);
     if (!isEmailSent) {
+      await remove.userById(newUser._id);
       throw createError(500, "Failed to send the welcome email.");
     }
 
-    return "User registered successfully";
+    return "User registered successfully. Please verify your email address.";
   },
 
   signIn: async ({ email, password, isRemembered }) => {
@@ -56,9 +54,9 @@ const authService = {
       throw createError(401, "Invalid email or password.");
     }
 
-    const token = generateAuthToken(
-      existingUser.role,
+    const token = generateToken(
       existingUser._id,
+      existingUser.role,
       isRemembered,
     );
     if (!token) {
@@ -83,7 +81,6 @@ const authService = {
     const id = decoded.id;
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1-hour expiration
     const blacklistedToken = await save.blacklistedToken(token, expiresAt, id);
-
     if (!blacklistedToken) {
       throw createError(500, "An error occurred while blacklisting the token.");
     }

@@ -1,4 +1,7 @@
-import { mongoose, bcrypt, faker, crypto } from "#packages/index.js";
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import { faker } from "@faker-js/faker";
+import crypto from "crypto";
 
 import { User } from "#models/index.js";
 import { logger, env } from "#config/index.js";
@@ -32,25 +35,7 @@ async function main() {
         username,
         email,
         password: defaultPassword,
-        role: "tutor",
-        isEmailVerified: true,
-      });
-    }
-
-    for (let i = 0; i < halfCount; i++) {
-      const firstName = faker.name.firstName();
-      const lastName = faker.name.lastName();
-      const email = faker.internet.email(firstName, lastName);
-      const username =
-        `${firstName}${crypto.createHash("sha256").update(email).digest("hex").substring(0, 8)}`.toLowerCase();
-
-      users.push({
-        firstName,
-        lastName,
-        username,
-        email,
-        password: defaultPassword,
-        role: "student",
+        role: "user",
         isEmailVerified: true,
       });
     }

@@ -1,4 +1,5 @@
-import { nodemailer } from "#packages/index.js";
+import nodemailer from "nodemailer";
+
 import { logger, env } from "./index.js";
 
 const { EMAIL_HOST, EMAIL_PORT, USER_EMAIL, USER_PASSWORD, EMAIL_SERVICE } =
@@ -18,9 +19,9 @@ const createTransporter = () => {
 
   transporter.verify((error) => {
     if (error) {
-      logger.error(`Email server connection error: ${error.message}`);
+      logger.error(`Email server connection error: ${error.message}`.red);
     } else {
-      logger.info("Email server is ready to send messages.".magenta);
+      logger.info("Email server is ready to send messages.".brightMagenta);
     }
   });
 

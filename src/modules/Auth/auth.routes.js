@@ -1,17 +1,17 @@
-import { express } from "#packages/index.js";
+import express from "express";
 
-import dtos from "#dtos/index.js";
+import { signUpDto, signInDto, forgotPasswordDto } from "#dtos/index.js";
 import { validateDto } from "#middleware/index.js";
 import authController from "./auth.controller.js";
 
 export const authRoutes = express.Router();
 
 authRoutes
-  .post("/signup", validateDto(dtos.signUp), authController.signUp)
-  .post("/signin", validateDto(dtos.signIn), authController.signIn)
+  .post("/signup", validateDto(signUpDto), authController.signUp)
+  .post("/signin", validateDto(signInDto), authController.signIn)
   .post("/signout", authController.signOut)
   .post(
-    "/forgot-password",
-    validateDto(dtos.forgotPassword),
+    "/forgot-password/:email",
+    validateDto(forgotPasswordDto),
     authController.forgotPassword,
   );

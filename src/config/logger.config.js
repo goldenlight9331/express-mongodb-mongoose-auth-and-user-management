@@ -1,4 +1,4 @@
-import { winston } from "#packages/index.js";
+import winston from "winston";
 
 import { env } from "./index.js";
 

@@ -1,0 +1,338 @@
+openapi: 3.0.0
+info:
+  title: Authentication API
+  version: v1
+  description: API for user authentication and account management.
+
+tags:
+  - name: Auth
+    description: API endpoints for user authentication and account management.
+
+components:
+  schemas:
+    # Reusable Schema Definitions
+    ID: # Reusable schema for an ID (e.g., MongoDB's _id)
+      type: string
+      description: Unique identifier.
+      example: "60d0fe4f5311236168a109ca"
+      pattern: "^[0-9a-fA-F]{24}$" # Example: Check for 24-character hexadecimal string (MongoDB ObjectId)
+
+    Email: # Reusable Schema for email
+      type: string
+      format: email
+      description: Email address.
+      example: "johndoe@example.com"
+      maxLength: 255 # Common limit
+      minLength: 5
+
+    Password: #Reusable Schema for Password
+      type: string
+      format: password
+      description: User password. Must meet security requirements.
+      example: "P@$$wOrd"
+      minLength: 8 # Minimum password length
+      maxLength: 128 # Maximum password length
+      pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\-]).*$" # Requires one lowercase, one uppercase, one digit and one special character
+
+    Role: #Reusable Schema for Role
+      type: string
+      enum: [admin, operator]
+      description: Role of the user (admin or operator).
+      default: operator
+      example: operator
+
+    User:
+      type: object
+      properties:
+        _id:
+          $ref: "#/components/schemas/ID"
+        name:
+          type: string
+          description: Full name of the user.
+          example: "John Doe"
+          minLength: 2 # Example minimum name length
+          maxLength: 100 # Example maximum name length
+        email:
+          $ref: "#/components/schemas/Email"
+        role:
+          $ref: "#/components/schemas/Role"
+        isEmailVerified:
+          type: boolean
+          description: Indicates if the user's email is verified.
+          example: false
+        isApproved:
+          type: boolean
+          description: Indicates if the user is approved.
+          example: false
+        profilePicture:
+          type: string
+          nullable: true
+          description: URL of the user's profile picture (optional).  Can be null.
+          example: "https://example.com/profile.jpg"
+          format: uri # Add format uri
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp of when the user account was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp of when the user account was last updated.
+      required:
+        - name
+        - email
+        - role
+
+    SignUpRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          description: Full name of the user.
+          example: "John Doe"
+          minLength: 2 # Example minimum name length
+          maxLength: 100 # Example maximum name length
+        email:
+          $ref: "#/components/schemas/Email"
+        password:
+          $ref: "#/components/schemas/Password"
+        role:
+          $ref: "#/components/schemas/Role"
+
+    SignInRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          $ref: "#/components/schemas/Email"
+        password:
+          $ref: "#/components/schemas/Password"
+
+    PasswordResetRequest:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          $ref: "#/components/schemas/Password"
+
+    SuccessMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Generic success message.
+          example: "Operation completed successfully."
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message.
+          example: "An error occurred."
+
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT access token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+  responses:
+    # Reusable Response Definitions
+    Success:
+      description: Successful operation.
+
+    Created:
+      description: Resource created successfully.
+
+    BadRequest:
+      description: Bad request - validation error or missing parameters.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    Unauthorized:
+      description: Unauthorized - invalid credentials or missing token.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    Forbidden:
+      description: Forbidden - the user does not have permission to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    InternalServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    SignOutSuccess:
+      description: User signed out successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessMessage"
+
+    SignInSuccess:
+      description: User signed in successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TokenResponse"
+
+    PasswordResetSuccess:
+      description: Password reset successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessMessage"
+
+    UserRegisteredSuccess:
+      description: User registered successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessMessage"
+
+  parameters:
+    # Reusable Parameter Definitions
+    EmailPath:
+      in: path
+      name: email
+      required: true
+      description: Email address of the user.
+      schema:
+        $ref: "#/components/schemas/Email"
+
+  securitySchemes: # Define the security scheme for JWT authentication
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /api/v1/signup:
+    post:
+      summary: Register a new user
+      description: Creates a new user account with the provided details.
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignUpRequest"
+      responses:
+        201:
+          $ref: "#/components/responses/UserRegisteredSuccess"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/v1/signin:
+    post:
+      summary: Sign in a user
+      description: Authenticates the user using their credentials and returns a JWT token.
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignInRequest"
+      responses:
+        200:
+          $ref: "#/components/responses/SignInSuccess"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/v1/signout:
+    post:
+      summary: Sign out a user
+      description: Invalidates the current JWT token, effectively signing the user out.  Requires a valid JWT to be presented (e.g., in the `Authorization` header).
+      tags: [Auth]
+      security: # Indicate that this endpoint requires authentication
+        - bearerAuth: [] # Assumes you'll define this security scheme
+      responses:
+        200:
+          $ref: "#/components/responses/SignOutSuccess"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/v1/forgot-password/{email}:
+    post:
+      summary: Request password reset
+      description: Initiates a password reset for the specified user.  A password reset link/token will be sent to the user's email address.  No request body is required.
+      tags: [Auth]
+      parameters:
+        - $ref: "#/components/parameters/EmailPath"
+      responses:
+        200:
+          $ref: "#/components/responses/PasswordResetSuccess"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound" # Add 404 if the email doesn't exist
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/v1/reset-password: # Separate endpoint for actually resetting the password
+    post:
+      summary: Reset password with token
+      description: Resets the user's password using a reset token received via email.
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - password
+              properties:
+                token:
+                  type: string
+                  description: The password reset token received via email.
+                  example: "someRandomToken"
+                  minLength: 36 #Example for UUID
+                  maxLength: 255 #Example limit
+                password:
+                  $ref: "#/components/schemas/Password"
+      responses:
+        200:
+          $ref: "#/components/responses/PasswordResetSuccess"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound" # Add 404 if the token is invalid
+        500:
+          $ref: "#/components/responses/InternalServerError"

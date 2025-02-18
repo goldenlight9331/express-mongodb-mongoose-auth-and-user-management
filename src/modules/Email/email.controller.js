@@ -2,15 +2,15 @@ import { asyncHandler } from "#utils/index.js";
 import emailService from "./email.service.js";
 
 const emailController = {
-  verifyEmail: asyncHandler(async (req, res) => {
+  verify: asyncHandler(async (req, res) => {
     const { verificationToken } = req.params;
-    const result = await emailService.verifyEmail(verificationToken);
+    const result = await emailService.verify(verificationToken);
     res.status(200).send(result);
   }),
 
-  sendVerificationEmail: asyncHandler(async (req, res) => {
+  send: asyncHandler(async (req, res) => {
     const { email } = req.body;
-    const result = await emailService.sendVerificationEmail(email);
+    const result = await emailService.send(email);
     res.status(200).send(result);
   }),
 };

@@ -1,8 +1,11 @@
-import { mongoose, bcrypt, jwt, createError } from "#packages/index.js";
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import createError from "http-errors";
 
 import { env } from "#config/index.js";
 
-const { JWT_SECRET, JWT_EXPIRY, JWT_ALGORITHM } = env;
+const { JWT_SECRET_KEY, JWT_EXPIRY, JWT_ALGORITHM } = env;
 const { Schema, model } = mongoose;
 
 const UserSchema = new Schema(
@@ -13,22 +16,12 @@ const UserSchema = new Schema(
       trim: true,
       minlength: [2, "First name must be at least 2 characters long"],
     },
-
     lastName: {
       type: String,
       required: [true, "Last name is required"],
       trim: true,
       minlength: [2, "Last name must be at least 2 characters long"],
     },
-
-    username: {
-      type: String,
-      required: [true, "Username is required"],
-      unique: true,
-      trim: true,
-      minlength: [2, "Username must be at least 2 characters long"],
-    },
-
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -37,39 +30,34 @@ const UserSchema = new Schema(
       trim: true,
       match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
     },
-
     password: {
       type: String,
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters long"],
     },
-
     role: {
       type: String,
       enum: {
-        values: ["admin", "tutor", "student"],
-        message: "Role must be either admin, tutor or student",
+        values: ["admin", "user"],
+        message: "Role must be either admin or user",
       },
-      default: "student",
-      required: true,
+      default: "user",
     },
-
-    profilePicture: {
-      type: String,
-      default: null,
-    },
-
     isEmailVerified: {
       type: Boolean,
       default: false,
     },
+    profilePicture: {
+      type: String,
+      default: null,
+    },
   },
   {
-    timestamps: true, // Adds createdAt and updatedAt timestamps to the document
+    timestamps: true,
     toJSON: {
       transform: (doc, ret) => {
-        delete ret.password; // Removes the password field from the JSON representation
-        return ret; // Returns the modified object
+        delete ret.password;
+        return ret;
       },
     },
   },
@@ -88,7 +76,7 @@ UserSchema.methods.generateAuthToken = function () {
     {
       role: this.role,
     },
-    JWT_SECRET,
+    JWT_SECRET_KEY,
     {
       expiresIn: JWT_EXPIRY,
       algorithm: JWT_ALGORITHM,
@@ -98,10 +86,6 @@ UserSchema.methods.generateAuthToken = function () {
 };
 
 UserSchema.methods.comparePassword = async function (password) {
-  if (!password || !this.password) {
-    throw createError(400, "Password is required");
-  }
-
   try {
     const isMatch = await bcrypt.compare(password, this.password);
 
@@ -115,4 +99,4 @@ UserSchema.methods.comparePassword = async function (password) {
   }
 };
 
-export const User = model("Users", UserSchema);
+export const User = model("User", UserSchema);

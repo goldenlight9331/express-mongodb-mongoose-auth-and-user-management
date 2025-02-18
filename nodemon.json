@@ -1,17 +1,6 @@
 {
-  "watch": [
-    "src",
-    ".env"
-  ],
+  "watch": ["src", ".env"],
   "ext": "js,json",
-  "ignore": [
-    "node_modules"
-  ],
-  "exec": "node src/app.js",
-  "restartable": "rs",
-  "verbose": false,
-  "env": {
-    "NODE_ENV": "development",
-    "PORT": 5000
-  }
+  "ignore": ["node_modules"],
+  "exec": "node ./src/index.js"
 }

@@ -1,4 +1,4 @@
-import { mongoose } from "#packages/index.js";
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
@@ -16,6 +16,6 @@ const BlacklistedTokenSchema = new Schema({
 });
 
 export const BlacklistedToken = mongoose.model(
-  "BlacklistedTokens",
+  "BlacklistedToken",
   BlacklistedTokenSchema,
 );

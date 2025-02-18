@@ -1,0 +1,293 @@
+openapi: 3.0.0
+info:
+  title: User Management API
+  version: v1
+  description: API for managing user accounts.
+
+tags:
+  - name: Users
+    description: API endpoints for user account management.
+
+components:
+  schemas:
+    ID: # Reusable schema for an ID (e.g., MongoDB's _id)
+      type: string
+      description: Unique identifier.
+      example: "60d0fe4f5311236168a109ca"
+      pattern: "^[0-9a-fA-F]{24}$" # Example: Check for 24-character hexadecimal string (MongoDB ObjectId)
+
+    Email: # Reusable Schema for email
+      type: string
+      format: email
+      description: Email address.
+      example: "johndoe@example.com"
+      maxLength: 255 # Common limit
+      minLength: 5
+
+    Role: #Reusable Schema for Role
+      type: string
+      enum: [admin, operator]
+      description: Role of the user (admin or operator).
+      default: operator
+      example: operator
+
+    # or define new ones specific to user management, such as...)
+    UserProfile:
+      type: object
+      properties:
+        _id:
+          $ref: "#/components/schemas/ID" # Reuse ID schema
+        name:
+          type: string
+          description: Full name of the user
+          example: John Doe
+          minLength: 2
+          maxLength: 100
+        email:
+          $ref: "#/components/schemas/Email" # Reuse Email schema
+        role:
+          $ref: "#/components/schemas/Role"
+        isEmailVerified:
+          type: boolean
+          description: Indicates if the user's email is verified.
+          example: false
+        isApproved:
+          type: boolean
+          description: Indicates if the user is approved.
+          example: false
+        profilePicture:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to the user's profile picture.
+          example: https://example.com/jane.jpg
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp of when the user account was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp of when the user account was last updated.
+      required:
+        - name
+        - email
+        - role
+
+    UpdateUserProfileRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New name for the user.
+          example: Jane Doe
+          minLength: 2
+          maxLength: 100
+        profilePicture:
+          type: string
+          format: uri
+          description: New URL for the user's profile picture.
+          example: https://example.com/jane.jpg
+
+    UserList:
+      type: array
+      items:
+        $ref: "#/components/schemas/UserProfile"
+        description: List of user profiles.
+
+  responses:
+    UserFound:
+      description: User details retrieved successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UserProfile"
+
+    UserUpdated:
+      description: User profile updated successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UserProfile"
+
+    UserDeleted:
+      description: User deleted successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "User deleted successfully"
+
+    UserListFound:
+      description: List of users retrieved successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UserList"
+
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "User not found"
+
+    BadRequest:
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Invalid request parameters"
+
+    Unauthorized:
+      description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Unauthorized"
+
+    Forbidden:
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Forbidden"
+
+    InternalServerError:
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Internal server error"
+
+    # (Include other responses like NotFound, BadRequest, InternalServerError, etc.)
+
+  parameters:
+    UserIDPath:
+      in: path
+      name: id
+      required: true
+      description: The ID of the user to retrieve.
+      schema:
+        $ref: "#/components/schemas/ID"
+
+  securitySchemes: # Define the security scheme for JWT authentication
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /api/v1/users:
+    get:
+      summary: Get all users
+      description: Retrieves a list of all users (Admin only).
+      tags: [Users]
+      security:
+        - bearerAuth: [] # Requires authentication
+      responses:
+        200:
+          $ref: "#/components/responses/UserListFound"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/v1/users/{id}:
+    get:
+      summary: Get user by ID
+      description: Retrieves a user's profile information by their ID.
+      tags: [Users]
+      security:
+        - bearerAuth: [] # Requires authentication
+      parameters:
+        - $ref: "#/components/parameters/UserIDPath"
+      responses:
+        200:
+          $ref: "#/components/responses/UserFound"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    patch:
+      summary: Update user profile
+      description: Updates a user's profile information.
+      tags: [Users]
+      security:
+        - bearerAuth: [] # Requires authentication
+      parameters:
+        - $ref: "#/components/parameters/UserIDPath"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: New name for the user
+                  example: Jane Doe
+                profilePicture:
+                  type: string
+                  format: binary
+                  description: New profile picture
+      responses:
+        200:
+          $ref: "#/components/responses/UserUpdated"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: Delete user by ID
+      description: Deletes a user account (Admin only).
+      tags: [Users]
+      security:
+        - bearerAuth: [] # Requires authentication
+      parameters:
+        - $ref: "#/components/parameters/UserIDPath"
+      responses:
+        204:
+          $ref: "#/components/responses/UserDeleted"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
