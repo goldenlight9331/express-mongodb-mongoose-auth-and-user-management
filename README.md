@@ -11,7 +11,7 @@ The `package.json` file contains several useful scripts:
 
 ## API Endpoints 📌
 
-See the [API Endpoints Documentation](./docs/API_ENDPOINTS.md) for a comprehensive list of endpoints, their descriptions, and required parameters.
+See the [API Endpoints Documentation] for a comprehensive list of endpoints, their descriptions, and required parameters.
 
 Here is a quick overview:
 
