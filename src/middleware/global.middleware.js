@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 // eslint-disable-next-line no-unused-vars
 import colors from "colors";
 
-import { logger, env, swaggerSpec } from "#config/index.js";
+import { logger, env, swaggerSpec, promptAI } from "#config/index.js";
 import { uploadDirectory } from "#constants/index.js";
 
 const { NODE_ENV } = env;
@@ -17,14 +17,18 @@ const corsOptions = {
 };
 
 // eslint-disable-next-line no-unused-vars
-const errorHandler = (err, req, res, next) => {
+const errorHandler = async (err, req, res, next) => {
   const status = err.statusCode || 500;
   const message = err.message || "Something went wrong";
+  const aiResponse = await promptAI(
+    `Be an expert software engineer from Google and tell me, what's the following error and how to fix it? ${message}`,
+  );
   const errorResponse = {
     success: false,
     status,
     message,
     stack: NODE_ENV === "development" ? err.stack : undefined,
+    fix: NODE_ENV === "development" ? aiResponse : undefined,
   };
 
   logger.error(JSON.stringify(errorResponse, null, 2));
