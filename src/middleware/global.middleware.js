@@ -20,15 +20,17 @@ const corsOptions = {
 const errorHandler = async (err, req, res, next) => {
   const status = err.statusCode || 500;
   const message = err.message || "Something went wrong";
-  const aiResponse = await promptAI(
-    `Be an expert software engineer from Google and tell me, what's the following error and how to fix it? ${message}`,
+  const stack = err.stack || "No stack trace available";
+  const ai_response = await promptAI(
+    `Analyze this error and provide the root cause, technical impact, specific code fix, and debugging steps. Be precise and actionable. Respond in a single line with out text formatting (bolding, italicizing, etc). Error: ${message} Stack: ${stack}`,
   );
-  const errorResponse = {
+
+  const error_response = {
     success: false,
     status,
     message,
     stack: NODE_ENV === "development" ? err.stack : undefined,
-    fix: NODE_ENV === "development" ? aiResponse : undefined,
+    fix: NODE_ENV === "development" ? ai_response : undefined,
   };
 
   logger.error(JSON.stringify(errorResponse, null, 2));
