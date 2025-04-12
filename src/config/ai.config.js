@@ -12,7 +12,7 @@ const DEFAULT_CONFIG = {
   top_p: 0.9,
   frequency_penalty: 0.5,
   presence_penalty: 0.5,
-  stop: ["\n", "###"]
+  stop: ["\n", "###"],
 };
 
 const DEFAULT_MAX_RETRIES = 3;
@@ -25,9 +25,9 @@ const aiClient = axios.create({
     Authorization: `Bearer ${OPENROUTER_API_KEY}`,
     "Content-Type": "application/json",
     "HTTP-Referer": env.APP_URL || "https://yourwebsite.com", // Required by OpenRouter
-    "X-Title": env.APP_NAME || "AI Assistant" // Recommended by OpenRouter
+    "X-Title": env.APP_NAME || "AI Assistant", // Recommended by OpenRouter
   },
-  timeout: 30000
+  timeout: 30000,
 });
 
 export const promptAI = async (prompt, customOptions = {}) => {
@@ -40,46 +40,55 @@ export const promptAI = async (prompt, customOptions = {}) => {
     temperature: customOptions.temperature || DEFAULT_CONFIG.temperature,
     max_tokens: customOptions.maxTokens || DEFAULT_CONFIG.max_tokens,
     top_p: customOptions.topP || DEFAULT_CONFIG.top_p,
-    frequency_penalty: customOptions.frequencyPenalty || DEFAULT_CONFIG.frequency_penalty,
-    presence_penalty: customOptions.presencePenalty || DEFAULT_CONFIG.presence_penalty,
+    frequency_penalty:
+      customOptions.frequencyPenalty || DEFAULT_CONFIG.frequency_penalty,
+    presence_penalty:
+      customOptions.presencePenalty || DEFAULT_CONFIG.presence_penalty,
     stop: customOptions.stop || DEFAULT_CONFIG.stop,
     messages: [
       {
         role: "system",
-        content: customOptions.systemMessage || "You are an expert software engineer assistant."
+        content:
+          customOptions.systemMessage ||
+          "You are an expert software engineer assistant.",
       },
       {
         role: "user",
-        content: prompt
-      }
-    ]
+        content: prompt,
+      },
+    ],
   };
 
   // Implement retry with exponential backoff
   while (retries < DEFAULT_MAX_RETRIES) {
     try {
       const response = await aiClient.post("", requestPayload);
-      
+
       if (!response.data?.choices?.[0]?.message?.content) {
         throw new Error("Invalid response format from API");
       }
-      
+
       return response.data.choices[0].message.content;
     } catch (error) {
       lastError = error;
       retries++;
-      
+
       // Don't delay on the last attempt
       if (retries < DEFAULT_MAX_RETRIES) {
         // Exponential backoff with jitter
-        const delay = RETRY_DELAY_MS * Math.pow(2, retries - 1) * (0.5 + Math.random() * 0.5);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        const delay =
+          RETRY_DELAY_MS *
+          Math.pow(2, retries - 1) *
+          (0.5 + Math.random() * 0.5);
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
   }
 
   // If we exhaust all retries, throw the last error
-  throw new Error(`Failed after ${DEFAULT_MAX_RETRIES} attempts: ${lastError.message}`);
+  throw new Error(
+    `Failed after ${DEFAULT_MAX_RETRIES} attempts: ${lastError.message}`,
+  );
 };
 
 export const chatWithAI = async (messages, customOptions = {}) => {
@@ -88,10 +97,12 @@ export const chatWithAI = async (messages, customOptions = {}) => {
     temperature: customOptions.temperature || DEFAULT_CONFIG.temperature,
     max_tokens: customOptions.maxTokens || DEFAULT_CONFIG.max_tokens,
     top_p: customOptions.topP || DEFAULT_CONFIG.top_p,
-    frequency_penalty: customOptions.frequencyPenalty || DEFAULT_CONFIG.frequency_penalty,
-    presence_penalty: customOptions.presencePenalty || DEFAULT_CONFIG.presence_penalty,
+    frequency_penalty:
+      customOptions.frequencyPenalty || DEFAULT_CONFIG.frequency_penalty,
+    presence_penalty:
+      customOptions.presencePenalty || DEFAULT_CONFIG.presence_penalty,
     stop: customOptions.stop || DEFAULT_CONFIG.stop,
-    messages
+    messages,
   };
 
   try {

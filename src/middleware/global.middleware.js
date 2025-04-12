@@ -46,7 +46,7 @@ const error_handler = async (err, req, res, next) => {
     "columnNumber",
   ];
   const additionalInfo = Object.fromEntries(
-    Object.entries(err).filter(([key]) => !excludedKeys.includes(key))
+    Object.entries(err).filter(([key]) => !excludedKeys.includes(key)),
   );
 
   // Construct AI prompt with all available error information
@@ -71,8 +71,9 @@ const error_handler = async (err, req, res, next) => {
     aiPromptParts.push(`Additional Info: ${JSON.stringify(additionalInfo)}`);
 
   // Get AI response only in development mode
-  const ai_response =
-    is_development ? await promptAI(aiPromptParts.join("\n")) : undefined;
+  const ai_response = is_development
+    ? await promptAI(aiPromptParts.join("\n"))
+    : undefined;
 
   // Construct response object
   const error_response = {
@@ -106,7 +107,7 @@ const applyGlobalMiddleware = (app, rootRouter) => {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   app.use(rootRouter);
   app.use(invalidRouteHandler);
-  app.use(errorHandler);
+  app.use(error_handler);
 };
 
 export { applyGlobalMiddleware };

@@ -24,7 +24,7 @@ export const connectDatabase = async () => {
     const db = mongoose.connection;
 
     db.on("error", (err) => {
-      logger.error("MongoDB connection error:".red.bold, err.message);
+      logger.error(`MongoDB connection error: ${err.message}`);
     });
 
     db.on("disconnected", () => {
@@ -38,7 +38,7 @@ export const connectDatabase = async () => {
       process.exit(0);
     });
   } catch (error) {
-    logger.error("Failed to connect to MongoDB:".red.bold, error.message);
+    logger.error(`Failed to connect to MongoDB: ${error.message}`);
     process.exit(1);
   }
 };
