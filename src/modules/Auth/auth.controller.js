@@ -1,26 +1,10 @@
-import { asyncHandler } from "#utils/index.js";
+import { asyncHandler, getCookieOptions } from "#utils/index.js";
 import { env } from "#config/index.js";
 import authService from "./auth.service.js";
 
 const {
-  NODE_ENV,
   COOKIE_NAME,
-  COOKIE_HTTP_ONLY,
-  COOKIE_SAME_SITE,
-  COOKIE_SHORT_EXPIRY,
-  COOKIE_LONG_EXPIRY,
-  COOKIE_PATH,
 } = env;
-
-const getCookieOptions = (isRemembered) => {
-  return {
-    httpOnly: COOKIE_HTTP_ONLY, // Important:  Prevent client-side JavaScript access
-    secure: NODE_ENV === "production", // Send only over HTTPS in production
-    sameSite: COOKIE_SAME_SITE, // Prevent CSRF attacks
-    maxAge: isRemembered ? COOKIE_LONG_EXPIRY : COOKIE_SHORT_EXPIRY,
-    path: COOKIE_PATH, // Cookie is valid for the entire domain
-  };
-};
 
 const authController = {
   signUp: asyncHandler(async (req, res) => {
