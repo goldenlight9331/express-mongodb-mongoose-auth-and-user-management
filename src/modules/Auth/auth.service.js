@@ -1,7 +1,11 @@
 import createError from "http-errors";
 import bcrypt from "bcryptjs";
 
-import { generateToken, decodeToken, sendVerificationEmail } from "#utils/index.js";
+import {
+  generateToken,
+  decodeToken,
+  sendVerificationEmail,
+} from "#utils/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
 const { save, read, remove, update } = dataAccess;
@@ -51,7 +55,11 @@ const authService = {
       throw createError(401, "Invalid email or password.");
     }
 
-    const token = generateToken(existingUser._id, existingUser.role, isRemembered);
+    const token = generateToken(
+      existingUser._id,
+      existingUser.role,
+      isRemembered,
+    );
     if (!token) {
       throw createError(500, "Token generation failed");
     }
@@ -91,7 +99,9 @@ const authService = {
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(newPassword, salt);
 
-    const isPasswordUpdated = await update.userById(existingUser._id, { password });
+    const isPasswordUpdated = await update.userById(existingUser._id, {
+      password,
+    });
     if (!isPasswordUpdated) {
       throw createError(500, "Password update failed");
     }

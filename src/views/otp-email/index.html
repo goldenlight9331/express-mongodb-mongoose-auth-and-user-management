@@ -80,22 +80,23 @@
       <h2>Password Reset Code</h2>
       <p>Hello,</p>
       <p>
-        We received a request to reset your password. Enter the 4-digit code below to continue:
+        We received a request to reset your password. Enter the 4-digit code
+        below to continue:
       </p>
 
       <div class="otp">${otpCode}</div>
 
-      <a
-        href="${backendUrl}/reset-password/${resetToken}"
-        class="reset-button"
-      >
+      <a href="${backendUrl}/reset-password/${resetToken}" class="reset-button">
         Reset Password
       </a>
 
       <p class="footer">
-        If you didn’t request this, simply ignore this email or contact our support team.
+        If you didn’t request this, simply ignore this email or contact our
+        support team.
       </p>
-      <p class="footer">Automated message: please do not reply to this email.</p>
+      <p class="footer">
+        Automated message: please do not reply to this email.
+      </p>
       <p class="footer">© 2025 Your Company Name – All rights reserved.</p>
     </div>
   </body>

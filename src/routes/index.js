@@ -1,6 +1,11 @@
 import express from "express";
 
-import { authRoutes, userRoutes, emailRoutes } from "#modules/index.js";
+import {
+  authRoutes,
+  userRoutes,
+  emailRoutes,
+  otpRoutes,
+} from "#modules/index.js";
 import { verifyAuthToken } from "#middleware/index.js";
 
 const rootRouter = express.Router();

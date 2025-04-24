@@ -45,7 +45,7 @@ const authController = {
     const payload = req.body;
     const result = await authService.resetPassword(payload);
     res.status(200).json(result);
-  })
+  }),
 };
 
 export default authController;
