@@ -1,13 +1,10 @@
 import createError from "http-errors";
+import bcrypt from "bcryptjs";
 
-import {
-  generateToken,
-  decodeToken,
-  sendVerificationEmail,
-} from "#utils/index.js";
+import { generateToken, decodeToken, sendVerificationEmail } from "#utils/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
-const { save, read, remove } = dataAccess;
+const { save, read, remove, update } = dataAccess;
 
 const authService = {
   signUp: async ({ firstName, lastName, username, email, password, role }) => {
@@ -54,11 +51,7 @@ const authService = {
       throw createError(401, "Invalid email or password.");
     }
 
-    const token = generateToken(
-      existingUser._id,
-      existingUser.role,
-      isRemembered,
-    );
+    const token = generateToken(existingUser._id, existingUser.role, isRemembered);
     if (!token) {
       throw createError(500, "Token generation failed");
     }
@@ -66,6 +59,7 @@ const authService = {
     const result = {
       id: existingUser._id,
       role: existingUser.role,
+      name: existingUser.name,
       token,
     };
 
@@ -73,7 +67,7 @@ const authService = {
   },
 
   signOut: async (token) => {
-    const decoded = await decodeToken(token);
+    const decoded = decodeToken(token);
     if (!decoded) {
       throw createError(401, "The provided token is invalid or expired.");
     }
@@ -88,33 +82,21 @@ const authService = {
     return "Sign-out successful. The token has been invalidated.";
   },
 
-  forgotPassword: async (email, password) => {
+  resetPassword: async ({ email, newPassword }) => {
     const existingUser = await read.userByEmail(email);
     if (!existingUser) {
-      throw createError(400, "A user with this email does not exist.");
+      throw createError(404, "User not found");
     }
 
-    const verificationToken = generateVerificationToken(existingUser._id);
-    if (!verificationToken) {
-      throw createError(500, "An error occurred while generating the token.");
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(newPassword, salt);
+
+    const isPasswordUpdated = await update.userById(existingUser._id, { password });
+    if (!isPasswordUpdated) {
+      throw createError(500, "Password update failed");
     }
 
-    const isEmailSent = await sendVerificationEmail(email, verificationToken);
-    if (!isEmailSent) {
-      throw createError(500, "Failed to send the welcome email.");
-    }
-
-    const updatedUser = await update.forgottenPassword(email, hashedPassword);
-    if (!updatedUser) {
-      throw createError(404, "User not found or update failed");
-    }
-
-    const hashedPassword = await hashPassword(password);
-    if (!hashedPassword) {
-      throw createError(500, "An error occurred while hashing the password.");
-    }
-
-    return "Password updated successfully";
+    return { status: true, message: "Password updated successfully." };
   },
 };
 

@@ -14,5 +14,6 @@ rootRouter.use("/api/v1", v1Router);
 
 v1Router.use(authRoutes, emailRoutes);
 v1Router.use("/users", verifyAuthToken, userRoutes);
+v1Router.use("/otp", otpRoutes);
 
 export default rootRouter;

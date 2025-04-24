@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Reset Code</title>
+    <style>
+      /* Base Styles */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      /* Container */
+      .container {
+        max-width: 400px;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin: auto;
+      }
+
+      /* Heading */
+      h2 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+
+      /* Message */
+      p {
+        font-size: 16px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      /* OTP Code */
+      .otp {
+        font-family: monospace;
+        font-size: 2rem;
+        letter-spacing: 0.5rem;
+        padding: 12px 20px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        display: inline-block;
+        margin: 20px 0;
+      }
+
+      /* Reset Button */
+      .reset-button {
+        display: inline-block;
+        color: white;
+        background-color: #3498db;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .reset-button:hover {
+        background-color: #2980b9;
+      }
+
+      /* Footer */
+      .footer {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Password Reset Code</h2>
+      <p>Hello,</p>
+      <p>
+        We received a request to reset your password. Enter the 4-digit code below to continue:
+      </p>
+
+      <div class="otp">${otpCode}</div>
+
+      <a
+        href="${backendUrl}/reset-password/${resetToken}"
+        class="reset-button"
+      >
+        Reset Password
+      </a>
+
+      <p class="footer">
+        If you didn’t request this, simply ignore this email or contact our support team.
+      </p>
+      <p class="footer">Automated message: please do not reply to this email.</p>
+      <p class="footer">© 2025 Your Company Name – All rights reserved.</p>
+    </div>
+  </body>
+</html>

@@ -2,27 +2,21 @@ import { asyncHandler, getCookieOptions } from "#utils/index.js";
 import { env } from "#config/index.js";
 import authService from "./auth.service.js";
 
-const {
-  COOKIE_NAME,
-} = env;
+const { COOKIE_NAME } = env;
 
 const authController = {
   signUp: asyncHandler(async (req, res) => {
-    const userData = req.body;
-    const result = await authService.signUp(userData);
+    const payload = req.body;
+    const result = await authService.signUp(payload);
     res.status(201).json(result);
   }),
 
   signIn: asyncHandler(async (req, res) => {
-    const userData = req.body;
-    const result = await authService.signIn(userData);
-    const token = result.token;
+    const payload = req.body;
+    const result = await authService.signIn(payload);
+    const { token } = result;
 
-    if (!COOKIE_NAME) {
-      throw new Error("COOKIE_NAME environment variable is not set");
-    }
-
-    const options = getCookieOptions(userData.isRemembered);
+    const options = getCookieOptions(payload.isRemembered);
 
     res
       .status(200)
@@ -47,12 +41,11 @@ const authController = {
     res.status(200).json(result);
   }),
 
-  forgotPassword: asyncHandler(async (req, res) => {
-    const { email } = req.params;
-    const { password } = req.body;
-    const result = await authService.forgotPassword(email, password);
+  resetPassword: asyncHandler(async (req, res) => {
+    const payload = req.body;
+    const result = await authService.resetPassword(payload);
     res.status(200).json(result);
-  }),
+  })
 };
 
 export default authController;

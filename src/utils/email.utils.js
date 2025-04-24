@@ -11,15 +11,15 @@ const readEmailTemplate = (folder, filename) => {
   return fs.readFileSync(filePath, "utf-8");
 };
 
-const sendVerificationEmail = async (email, verificationToken) => {
-  let emailHtml = readEmailTemplate("verification-email", "index.html")
-    .replace("${backendUrl}", backendUrl)
-    .replace("${verificationToken}", verificationToken);
+export const sendVerificationEmail = async (email, verificationToken) => {
+  const emailHtml = readEmailTemplate("verification-email", "index.html")
+    .replace(/\$\{backendUrl\}/g, backendUrl)
+    .replace(/\$\{verificationToken\}/g, verificationToken);
 
   const mailOptions = {
     from: USER_EMAIL,
     to: email,
-    subject: "Welcome to our platform - Verify your email",
+    subject: "Welcome to Vocora - Verify your email",
     html: emailHtml,
   };
 
@@ -30,11 +30,29 @@ const sendVerificationEmail = async (email, verificationToken) => {
   return true;
 };
 
-const sendVerificationNotification = () => {
-  return readEmailTemplate("verification-notification", "index.html").replace(
-    "${frontendUrl}",
-    frontendUrl,
+export const sendOtpEmail = async (email, otpCode) => {
+  const emailHtml = readEmailTemplate("otp-email", "index.html").replace(
+    /\$\{otpCode\}/g,
+    otpCode,
   );
+
+  const mailOptions = {
+    from: USER_EMAIL,
+    to: email,
+    subject: "Vocora - Password Reset Code",
+    html: emailHtml,
+  };
+
+  await transporter.sendMail(mailOptions);
+
+  logger.info(`OTP email sent to ${email}`);
+
+  return true;
 };
 
-export { sendVerificationEmail, sendVerificationNotification };
+export const sendVerificationNotification = () => {
+  return readEmailTemplate("verification-notification", "index.html").replace(
+    /\$\{frontendUrl\}/g,
+    frontendUrl + "/signin",
+  );
+};
