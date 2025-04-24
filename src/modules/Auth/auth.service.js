@@ -5,15 +5,32 @@ import {
   generateToken,
   decodeToken,
   sendVerificationEmail,
+  generateUniqueUsername,
 } from "#utils/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
 const { save, read, remove, update } = dataAccess;
 
 const authService = {
-  signUp: async ({ firstName, lastName, username, email, password, role }) => {
-    const existingUser = await read.userByEmail(email);
-    if (existingUser) {
+  signUp: async ({ firstName, lastName, email, password, role }) => {
+    let username;
+    let exists = true;
+    let attempts = 0;
+
+    while (exists && attempts < 5) {
+      username = generateUniqueUsername(firstName, lastName);
+      exists = await read.userByUsername(username);
+      attempts++;
+    }
+
+    if (exists)
+      throw createError(500, "Failed to generate a unique username. Retry...");
+
+    const [existingEmail] = await Promise.all([
+      read.userByEmail(email),
+      read.userByUsername(username),
+    ]);
+    if (existingEmail) {
       throw createError(400, "A user with this email already exists.");
     }
 

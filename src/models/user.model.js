@@ -22,6 +22,14 @@ const UserSchema = new Schema(
       trim: true,
       minlength: [2, "Last name must be at least 2 characters long"],
     },
+    username: {
+      type: String,
+      required: [true, "Username is required"],
+      trim: true,
+      minlength: [2, "Username must be at least 2 characters long"],
+      unique: true,
+      lowercase: true,
+    },
     email: {
       type: String,
       required: [true, "Email is required"],
