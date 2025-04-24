@@ -73,8 +73,9 @@ const authService = {
 
     return {
       id: user._id,
-      role: user.role,
       name: `${user.firstName} ${user.lastName}`,
+      email: user.email,
+      username: user.username,
       token,
     };
   },
