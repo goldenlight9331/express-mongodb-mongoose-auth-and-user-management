@@ -1,12 +1,7 @@
 import createError from "http-errors";
 import bcrypt from "bcryptjs";
 
-import {
-  generateToken,
-  decodeToken,
-  sendVerificationEmail,
-  generateUniqueUsername,
-} from "#utils/index.js";
+import { generateToken, decodeToken, sendVerificationEmail, generateUniqueUsername } from "#utils/index.js";
 import { dataAccess } from "#dataAccess/index.js";
 
 const { save, read, remove, update } = dataAccess;
@@ -23,25 +18,14 @@ const authService = {
       attempts++;
     }
 
-    if (exists)
-      throw createError(500, "Failed to generate a unique username. Retry...");
+    if (exists) throw createError(500, "Failed to generate a unique username. Retry...");
 
-    const [existingEmail] = await Promise.all([
-      read.userByEmail(email),
-      read.userByUsername(username),
-    ]);
+    const [existingEmail] = await Promise.all([read.userByEmail(email), read.userByUsername(username)]);
     if (existingEmail) {
       throw createError(400, "A user with this email already exists.");
     }
 
-    const newUser = await save.user(
-      firstName,
-      lastName,
-      username,
-      email,
-      password,
-      role,
-    );
+    const newUser = await save.user(firstName, lastName, username, email, password, role);
     if (!newUser) {
       throw createError(500, "Failed to create a new user.");
     }
@@ -61,34 +45,38 @@ const authService = {
     return "User registered successfully. Please verify your email address.";
   },
 
-  signIn: async ({ email, password, isRemembered }) => {
-    const existingUser = await read.userByEmail(email);
-    if (!existingUser) {
-      throw createError(401, "Invalid email or password.");
+  signIn: async ({ email, username, password, isRemembered }) => {
+    // Determine login method
+    const identifier = email || username;
+    if (!identifier || !password) {
+      throw createError(400, "Email or username and password are required.");
     }
 
-    const isValid = await existingUser.comparePassword(password);
+    // Lookup user by email or username
+    const user = email ? await read.userByEmail(email) : await read.userByUsername(username);
+
+    if (!user) {
+      throw createError(401, "Invalid email or username.");
+    }
+
+    // Validate password
+    const isValid = await user.comparePassword(password);
     if (!isValid) {
-      throw createError(401, "Invalid email or password.");
+      throw createError(401, "Invalid password.");
     }
 
-    const token = generateToken(
-      existingUser._id,
-      existingUser.role,
-      isRemembered,
-    );
+    // Generate auth token
+    const token = generateToken(user._id, user.role, isRemembered);
     if (!token) {
-      throw createError(500, "Token generation failed");
+      throw createError(500, "Token generation failed.");
     }
 
-    const result = {
-      id: existingUser._id,
-      role: existingUser.role,
-      name: existingUser.name,
+    return {
+      id: user._id,
+      role: user.role,
+      name: `${user.firstName} ${user.lastName}`,
       token,
     };
-
-    return result;
   },
 
   signOut: async (token) => {
