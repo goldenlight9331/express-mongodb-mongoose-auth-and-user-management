@@ -45,11 +45,6 @@ const roleValidation = Joi.string().required().valid("admin", "user").messages({
   "any.required": "Role is required.",
 });
 
-const isRememberedValidation = Joi.boolean().required().messages({
-  "boolean.base": "Is remembered should be a type of boolean.",
-  "any.required": "A boolean value of isRemembered field is required.",
-});
-
 const signUpDto = Joi.object({
   firstName: firstNameValidation,
   lastName: lastValidation,
