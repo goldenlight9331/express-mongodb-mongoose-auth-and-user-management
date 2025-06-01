@@ -18,7 +18,7 @@ const backendUrl =
 
 const frontendUrl =
   NODE_ENV === "production"
-    ? "https://yourDomain.com"
+    ? "https://www.yourDomain.com"
     : "http://localhost:3000";
 
 export { uploadDirectory, viewsDirectory, backendUrl, frontendUrl };
